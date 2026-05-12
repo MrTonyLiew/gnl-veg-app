@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GNL Vegetable Trading</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-dark: #1a4a0a;
+  --green-mid: #2d7a1a;
+  --green-light: #4caf30;
+  --green-pale: #e8f5e0;
+  --green-soft: #c5e8b0;
+  --amber: #e8940a;
+  --amber-pale: #fff3d6;
+  --red: #c0392b;
+  --red-pale: #fdecea;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5a5a5a;
+  --text-muted: #9a9a9a;
+  --bg: #f4f6f0;
+  --bg-white: #ffffff;
+  --border: #d8e8cc;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', 'Noto Sans SC', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ===== APP SHELL ===== */
+.app {
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--bg);
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== SCREENS ===== */
+.screen { display: none; flex-direction: column; min-height: 100vh; }
+.screen.active { display: flex; }
+
+/* ===== TOP BAR ===== */
+.topbar {
+  background: var(--green-dark);
+  padding: 14px 16px 12px;
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar-row1 {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.brand { display: flex; align-items: center; gap: 8px; }
+.brand-logo {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--green-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: white;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.5px;
+}
+.brand-name { color: white; font-size: 15px; font-weight: 600; line-height: 1.1; }
+.brand-sub { color: rgba(255,255,255,0.55); font-size: 10px; font-weight: 400; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.icon-btn {
+  background: rgba(255,255,255,0.12); border: none; border-radius: 8px;
+  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white; font-size: 16px; position: relative;
+  transition: background 0.15s;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.22); }
+.cart-badge {
+  position: absolute; top: -4px; right: -4px;
+  background: var(--amber); color: white;
+  font-size: 10px; font-weight: 700;
+  border-radius: 10px; min-width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 3px;
+}
+.search-bar {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.12); border-radius: 10px;
+  padding: 7px 12px;
+}
+.search-bar input {
+  background: transparent; border: none; outline: none;
+  color: white; font-size: 13px; flex: 1;
+  font-family: inherit;
+}
+.search-bar input::placeholder { color: rgba(255,255,255,0.45); }
+.search-icon { color: rgba(255,255,255,0.55); font-size: 14px; }
+
+/* ===== NOTICE BAR ===== */
+.notice-bar {
+  background: var(--amber-pale);
+  border-bottom: 1px solid #f0d898;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #7a4a00;
+}
+.notice-bar strong { font-weight: 600; }
+
+/* ===== LANG BAR ===== */
+.lang-bar {
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  display: flex; gap: 0;
+}
+.lang-btn {
+  padding: 8px 14px; border: none; background: transparent;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  color: var(--text-muted); border-bottom: 2px solid transparent;
+  transition: all 0.15s; font-family: inherit;
+}
+.lang-btn.active { color: var(--green-mid); border-bottom-color: var(--green-mid); }
+
+/* ===== CATEGORY SCROLL ===== */
+.cat-scroll {
+  display: flex; gap: 6px; padding: 10px 16px;
+  overflow-x: auto; scrollbar-width: none;
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border);
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-chip {
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+  cursor: pointer; transition: all 0.15s;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text-secondary);
+}
+.cat-chip.active {
+  background: var(--green-dark); color: white; border-color: var(--green-dark);
+}
+
+/* ===== SCROLLABLE CONTENT ===== */
+.scroll-content { flex: 1; overflow-y: auto; padding-bottom: 80px; }
+
+/* ===== SECTION HEADER ===== */
+.sec-hdr {
+  padding: 12px 16px 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sec-hdr h3 { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+.sec-hdr .count { font-size: 11px; color: var(--text-muted); background: var(--bg); border-radius: 10px; padding: 1px 6px; }
+
+/* ===== PRODUCT LIST ===== */
+.product-list { padding: 0 16px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+
+.prod-card {
+  background: var(--bg-white); border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 11px 14px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; transition: all 0.15s;
+  position: relative;
+}
+.prod-card:hover { border-color: var(--green-soft); box-shadow: var(--shadow); }
+.prod-card.in-cart { border-color: var(--green-light); background: #f5fbf0; }
+
+.prod-emoji { font-size: 26px; min-width: 36px; text-align: center; }
+
+.prod-info { flex: 1; min-width: 0; }
+.prod-names { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.prod-bm { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.prod-zh { font-size: 12px; color: var(--text-secondary); }
+.prod-en { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+.prod-variants { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.variant-pill {
+  display: flex; align-items: center; gap: 3px;
+  padding: 3px 8px; border-radius: 8px;
+  font-size: 11px; font-weight: 500;
+  background: var(--green-pale); color: var(--green-dark);
+  border: 1px solid var(--green-soft);
+}
+.variant-pill .vp-label { color: var(--text-muted); font-weight: 400; font-size: 10px; }
+.variant-pill.no-price { background: #f0f0f0; color: var(--text-muted); border-color: #e0e0e0; }
+
+.add-btn {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--green-dark); border: none; color: white;
+  font-size: 18px; cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.add-btn:hover { background: var(--green-mid); transform: scale(1.05); }
+.add-btn.added { background: var(--green-light); }
+
+.in-cart-dot {
+  position: absolute; top: 8px; right: 8px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green-light);
+}
+
+/* ===== CART FAB ===== */
+.cart-fab {
+  position: fixed; bottom: 72px; left: 50%; transform: translateX(-50%);
+  max-width: 388px; width: calc(100% - 32px);
+  background: var(--green-dark);
+  border-radius: 14px; padding: 13px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  transition: all 0.2s; z-index: 90;
+  opacity: 0; pointer-events: none;
+}
+.cart-fab.visible { opacity: 1; pointer-events: all; }
+.cart-fab:hover { background: var(--green-mid); }
+.cart-fab-left { display: flex; align-items: center; gap: 10px; }
+.cart-fab-count {
+  background: var(--amber); color: white;
+  font-size: 12px; font-weight: 700;
+  padding: 2px 8px; border-radius: 20px;
+}
+.cart-fab-label { color: rgba(255,255,255,0.8); font-size: 13px; }
+.cart-fab-total { color: white; font-size: 15px; font-weight: 600; }
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  max-width: 420px; width: 100%;
+  background: var(--bg-white); border-top: 1px solid var(--border);
+  display: flex; padding: 6px 0 10px; z-index: 100;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  cursor: pointer; padding: 4px; color: var(--text-muted);
+  font-size: 10px; font-weight: 500;
+  transition: color 0.15s;
+}
+.nav-item.active { color: var(--green-dark); }
+.nav-icon { font-size: 20px; line-height: 1; }
+
+/* ===== CART SCREEN ===== */
+.cart-header {
+  background: var(--green-dark); padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.back-btn {
+  background: rgba(255,255,255,0.15); border: none; border-radius: 8px;
+  width: 34px; height: 34px; color: white; font-size: 18px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.cart-header h2 { color: white; font-size: 16px; font-weight: 600; flex: 1; }
+.cart-header .item-count { color: rgba(255,255,255,0.6); font-size: 13px; }
+
+.cart-items { flex: 1; padding: 12px 16px; overflow-y: auto; padding-bottom: 200px; }
+
+.cart-item {
+  background: var(--bg-white); border-radius: 12px;
+  border: 1px solid var(--border); padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.ci-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ci-emoji { font-size: 22px; }
+.ci-name { flex: 1; }
+.ci-bm { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.ci-variant { font-size: 11px; color: var(--text-muted); }
+.ci-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 2px 4px; }
+.ci-remove:hover { color: var(--red); }
+.ci-bottom { display: flex; align-items: center; justify-content: space-between; }
+.ci-price { font-size: 12px; color: var(--green-mid); font-weight: 500; }
+.qty-row { display: flex; align-items: center; gap: 8px; }
+.qty-btn {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: var(--green-pale); border: 1px solid var(--green-soft);
+  color: var(--green-dark); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.qty-btn:hover { background: var(--green-soft); }
+.qty-input {
+  width: 50px; text-align: center; border: 1px solid var(--border);
+  border-radius: 6px; padding: 3px 6px; font-size: 13px; font-weight: 600;
+  font-family: inherit; color: var(--text-primary);
+}
+.qty-unit { font-size: 11px; color: var(--text-muted); }
+.ci-amount { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+
+/* Cart note */
+.cart-note-section { padding: 0 16px 12px; }
+.note-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; margin-bottom: 6px; }
+.note-textarea {
+  width: 100%; border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-size: 13px; font-family: inherit;
+  color: var(--text-primary); resize: none; background: var(--bg-white);
+  outline: none;
+}
+.note-textarea:focus { border-color: var(--green-mid); }
+
+/* Cart summary */
+.cart-summary {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  max-width: 420px; width: 100%;
+  background: var(--bg-white); border-top: 1px solid var(--border);
+  padding: 14px 16px 20px;
+}
+.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; }
+.summary-row .lbl { font-size: 13px; color: var(--text-secondary); }
+.summary-row .val { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.summary-total { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px; }
+.summary-total .lbl { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.summary-total .val { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+.place-order-btn {
+  width: 100%; margin-top: 12px;
+  background: var(--green-dark); color: white;
+  border: none; border-radius: 12px; padding: 14px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: background 0.15s;
+}
+.place-order-btn:hover { background: var(--green-mid); }
+
+/* ===== ORDER SUCCESS ===== */
+.success-screen {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px; text-align: center;
+  background: var(--bg);
+}
+.success-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--green-pale); border: 2px solid var(--green-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin-bottom: 16px;
+}
+.success-title { font-size: 20px; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
+.success-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; }
+.order-ref { background: var(--green-pale); border-radius: 10px; padding: 10px 20px; margin-bottom: 24px; font-size: 13px; color: var(--green-dark); }
+.order-ref strong { font-size: 16px; font-weight: 700; }
+.home-btn {
+  background: var(--green-dark); color: white; border: none;
+  border-radius: 12px; padding: 13px 32px;
+  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+
+/* ===== PAYMENT TYPE BADGE ===== */
+.payment-notice {
+  background: var(--bg-white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px; margin: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.payment-badge {
+  padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
+}
+.badge-kredit { background: #e8f0fe; color: #1a56db; }
+.badge-cod { background: var(--amber-pale); color: #7a4a00; }
+.payment-notice p { font-size: 12px; color: var(--text-secondary); }
+
+/* ===== ORDERS SCREEN ===== */
+.orders-header { background: var(--green-dark); padding: 14px 16px; }
+.orders-header h2 { color: white; font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.orders-header p { color: rgba(255,255,255,0.6); font-size: 12px; }
+
+.order-filter { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; scrollbar-width: none; }
+.filter-chip {
+  padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary);
+  white-space: nowrap; cursor: pointer;
+}
+.filter-chip.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
+
+.order-card {
+  background: var(--bg-white); border: 1px solid var(--border);
+  border-radius: 12px; margin: 0 16px 8px; padding: 14px;
+  cursor: pointer; transition: all 0.15s;
+}
+.order-card:hover { border-color: var(--green-soft); box-shadow: var(--shadow); }
+.order-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.order-no { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.order-date { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.status-badge { padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.status-pending { background: var(--amber-pale); color: #7a4a00; }
+.status-delivered { background: var(--green-pale); color: var(--green-dark); }
+.status-cancelled { background: var(--red-pale); color: var(--red); }
+.order-items-text { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.4; }
+.order-bottom { display: flex; justify-content: space-between; align-items: center; }
+.order-total-label { font-size: 12px; color: var(--text-muted); }
+.order-total { font-size: 16px; font-weight: 700; color: var(--green-dark); }
+
+.monthly-summary {
+  background: var(--green-pale); border: 1px solid var(--green-soft);
+  border-radius: 12px; margin: 0 16px 8px; padding: 12px 14px;
+}
+.ms-title { font-size: 12px; font-weight: 600; color: var(--green-dark); margin-bottom: 8px; }
+.ms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ms-item { }
+.ms-val { font-size: 16px; font-weight: 700; color: var(--green-dark); }
+.ms-lbl { font-size: 11px; color: #4a7a30; }
+
+/* ===== UPDATED PRICE TAG ===== */
+.price-updated { 
+  font-size: 10px; color: var(--text-muted);
+  padding: 2px 6px; background: var(--bg); border-radius: 4px;
+  border: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ===== SCREEN: HOME ===== -->
+<div id="screen-home" class="screen active">
+
+  <div class="topbar">
+    <div class="topbar-row1">
+      <div class="brand">
+        <div class="brand-logo">GNL</div>
+        <div>
+          <div class="brand-name">GNL Vegetable Trading</div>
+          <div class="brand-sub">Pasar Borong Selangor</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" onclick="goCart()" title="Cart">
+          🛒
+          <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+        </button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="搜索商品 / Cari Sayur / Search..." id="searchInput" oninput="filterProducts()">
+    </div>
+  </div>
+
+  <div class="notice-bar">
+    ⏰ 截单时间 / Masa Tutup Order: <strong>10:00 PM</strong> &nbsp;·&nbsp; 明早配送 Penghantaran Esok
+  </div>
+
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('zh', this)">中文</button>
+    <button class="lang-btn" onclick="setLang('bm', this)">Bahasa</button>
+    <button class="lang-btn" onclick="setLang('en', this)">English</button>
+    <span style="margin-left:auto; display:flex; align-items:center; padding:0 2px;">
+      <span class="price-updated">价格更新: 今晚 11PM</span>
+    </span>
+  </div>
+
+  <div class="cat-scroll" id="catScroll">
+    <div class="cat-chip active" onclick="filterCat('all',this)" data-cat="all">全部</div>
+    <div class="cat-chip" onclick="filterCat('tomato',this)" data-cat="tomato">🍅 番茄</div>
+    <div class="cat-chip" onclick="filterCat('chili',this)" data-cat="chili">🌶 辣椒</div>
+    <div class="cat-chip" onclick="filterCat('leafy',this)" data-cat="leafy">🥬 叶菜</div>
+    <div class="cat-chip" onclick="filterCat('gourd',this)" data-cat="gourd">🥒 瓜果</div>
+    <div class="cat-chip" onclick="filterCat('root',this)" data-cat="root">🥕 根茎</div>
+    <div class="cat-chip" onclick="filterCat('bean',this)" data-cat="bean">🫘 豆类</div>
+    <div class="cat-chip" onclick="filterCat('herb',this)" data-cat="herb">🌿 香草</div>
+    <div class="cat-chip" onclick="filterCat('other',this)" data-cat="other">🧄 其他</div>
+  </div>
+
+  <div class="scroll-content" id="productList"></div>
+
+  <div class="cart-fab" id="cartFab" onclick="goCart()">
+    <div class="cart-fab-left">
+      <span class="cart-fab-count" id="fabCount">0 品</span>
+      <span class="cart-fab-label">查看购物车</span>
+    </div>
+    <span class="cart-fab-total" id="fabTotal">RM 0.00</span>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showScreen('home')">
+      <div class="nav-icon">🏠</div><div>首页</div>
+    </div>
+    <div class="nav-item" onclick="showScreen('orders')">
+      <div class="nav-icon">📋</div><div>订单</div>
+    </div>
+    <div class="nav-item" onclick="showScreen('cart-screen')">
+      <div class="nav-icon">🛒</div><div>购物车</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">👤</div><div>我的</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN: CART ===== -->
+<div id="screen-cart-screen" class="screen">
+  <div class="cart-header">
+    <button class="back-btn" onclick="showScreen('home')">←</button>
+    <h2>购物车</h2>
+    <span class="item-count" id="cartItemCount">0 件</span>
+  </div>
+
+  <div class="cart-items" id="cartItems">
+    <div class="payment-notice">
+      <span class="payment-badge badge-kredit">账期</span>
+      <p>您的账户为账期付款。订单确认后按账期结算。</p>
+    </div>
+  </div>
+
+  <div class="cart-note-section">
+    <div class="note-label">备注 / Nota / Remarks</div>
+    <textarea class="note-textarea" id="orderNote" rows="2" placeholder="例：明早7点送到，正门收货..."></textarea>
+  </div>
+
+  <div class="cart-summary">
+    <div class="summary-row"><span class="lbl">商品总数</span><span class="val" id="summaryItems">0 件</span></div>
+    <div class="summary-row summary-total">
+      <span class="lbl">订单总额</span>
+      <span class="val" id="summaryTotal">RM 0.00</span>
+    </div>
+    <button class="place-order-btn" onclick="placeOrder()">确认下单 / Hantar Pesanan</button>
+  </div>
+</div>
+
+<!-- ===== SCREEN: ORDERS ===== -->
+<div id="screen-orders" class="screen">
+  <div class="orders-header">
+    <h2>我的订单</h2>
+    <p>餐馆 A · GNL Vegetable Trading</p>
+  </div>
+
+  <div class="order-filter">
+    <div class="filter-chip active">全部</div>
+    <div class="filter-chip">待确认</div>
+    <div class="filter-chip">已配送</div>
+    <div class="filter-chip">已取消</div>
+  </div>
+
+  <div class="scroll-content">
+    <div class="monthly-summary">
+      <div class="ms-title">📊 本月消费总结 (May 2025)</div>
+      <div class="ms-grid">
+        <div class="ms-item"><div class="ms-val">14</div><div class="ms-lbl">订单总数</div></div>
+        <div class="ms-item"><div class="ms-val">RM 2,840</div><div class="ms-lbl">消费总额</div></div>
+      </div>
+    </div>
+
+    <div class="order-card">
+      <div class="order-top">
+        <div><div class="order-no">订单 #0512-001</div><div class="order-date">2025-05-12 08:30</div></div>
+        <span class="status-badge status-pending">待确认</span>
+      </div>
+      <div class="order-items-text">番茄大 10kg · 小白菜 5kg · 菜心 8kg · 日本黄瓜 3kg</div>
+      <div class="order-bottom">
+        <span class="order-total-label">合计</span>
+        <span class="order-total">RM 118.50</span>
+      </div>
+    </div>
+
+    <div class="order-card">
+      <div class="order-top">
+        <div><div class="order-no">订单 #0511-003</div><div class="order-date">2025-05-11 07:15</div></div>
+        <span class="status-badge status-delivered">已配送</span>
+      </div>
+      <div class="order-items-text">芥兰 5kg · 青葱 10kg · 芹菜 6kg · 包菜 15kg</div>
+      <div class="order-bottom">
+        <span class="order-total-label">合计</span>
+        <span class="order-total">RM 203.00</span>
+      </div>
+    </div>
+
+    <div class="order-card">
+      <div class="order-top">
+        <div><div class="order-no">订单 #0510-002</div><div class="order-date">2025-05-10 09:00</div></div>
+        <span class="status-badge status-delivered">已配送</span>
+      </div>
+      <div class="order-items-text">Tomato XL 20kg · 珍珠茄 AA 8kg · 白萝卜 12kg</div>
+      <div class="order-bottom">
+        <span class="order-total-label">合计</span>
+        <span class="order-total">RM 156.00</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showScreen('home')">
+      <div class="nav-icon">🏠</div><div>首页</div>
+    </div>
+    <div class="nav-item active" onclick="showScreen('orders')">
+      <div class="nav-icon">📋</div><div>订单</div>
+    </div>
+    <div class="nav-item" onclick="showScreen('cart-screen')">
+      <div class="nav-icon">🛒</div><div>购物车</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">👤</div><div>我的</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN: SUCCESS ===== -->
+<div id="screen-success" class="screen">
+  <div class="success-screen">
+    <div class="success-icon">✅</div>
+    <div class="success-title">订单已成功提交！</div>
+    <div class="success-sub">GNL Vegetable Trading 将尽快确认您的订单。<br>明早配送，请保持电话畅通。</div>
+    <div class="order-ref">订单号: <strong id="orderRef">#0512-001</strong></div>
+    <button class="home-btn" onclick="showScreen('home')">返回首页</button>
+  </div>
+</div>
+
+</div><!-- end .app -->
+
+<script>
+// ===== PRODUCT DATA (from GNL delivery order + today's prices) =====
+const PRODUCTS = [
+  // TOMATO
+  { id:'tomato_xl', bm:'Tomato XL/L', zh:'番茄大', en:'Tomato XL/L', cat:'tomato', emoji:'🍅',
+    variants:[{label:'XL/L', price:3.00},{label:'M Size', price:2.60},{label:'Grade B', price:2.20}], unit:'kg'},
+  { id:'cherry_tomato', bm:'Cherry Tomato', zh:'车厘茄', en:'Cherry Tomato', cat:'tomato', emoji:'🍅',
+    variants:[{label:'Standard', price:4.50}], unit:'kg'},
+
+  // CHILI
+  { id:'cili_apple_hijau', bm:'Cili Apple Hijau', zh:'大青力', en:'Capsicum Green', cat:'chili', emoji:'🫑',
+    variants:[{label:'Grade A', price:6.00},{label:'M Size', price:4.50}], unit:'kg'},
+  { id:'cili_apple_merah', bm:'Cili Apple Merah', zh:'红大力', en:'Capsicum Red', cat:'chili', emoji:'🌶',
+    variants:[{label:'M Size', price:4.00}], unit:'kg'},
+  { id:'cili_apple_kuning', bm:'Cili Apple Kuning', zh:'黄大力', en:'Capsicum Yellow', cat:'chili', emoji:'🌶',
+    variants:[{label:'M Size', price:4.00}], unit:'kg'},
+  { id:'cili_hijau', bm:'Cili Hijau A', zh:'青力', en:'Hot Chili Green', cat:'chili', emoji:'🌶',
+    variants:[{label:'Grade A', price:7.00},{label:'Grade B', price:4.00}], unit:'kg'},
+  { id:'cili_merah', bm:'Cili Merah A', zh:'红力', en:'Hot Chili Red', cat:'chili', emoji:'🌶',
+    variants:[{label:'Grade A', price:7.50},{label:'Grade B', price:4.00}], unit:'kg'},
+  { id:'cili_api', bm:'Cili Api', zh:'指天椒', en:'Bird Eye Chili', cat:'chili', emoji:'🌶',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'chili_banji', bm:'Chili Banji', zh:'班吉椒', en:'Chili Banji', cat:'chili', emoji:'🌶',
+    variants:[{label:'Standard', price:7.50}], unit:'kg'},
+
+  // LEAFY
+  { id:'sawi', bm:'Sawi / Sawi Panjang', zh:'菜心', en:'Choy Sum', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:2.80}], unit:'kg'},
+  { id:'sawi_jepun', bm:'Sawi Jepun', zh:'小白菜', en:'Siew Pak Choy', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:2.80}], unit:'kg'},
+  { id:'sawi_putih', bm:'Sawi Putih', zh:'大白菜', en:'White Cabbage', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:3.60}], unit:'kg'},
+  { id:'bayam', bm:'Bayam', zh:'苋菜', en:'Spinach', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'kai_lan', bm:'Kai Lan', zh:'芥兰', en:'Chinese Broccoli', cat:'leafy', emoji:'🥦',
+    variants:[{label:'Standard', price:6.50}], unit:'kg'},
+  { id:'kangkung', bm:'Kang Kong', zh:'蕹菜', en:'Water Spinach', cat:'leafy', emoji:'🌿',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'salad_bulat', bm:'Salad Bulat', zh:'生菜', en:'Iceberg Lettuce', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:7.80}], unit:'kg'},
+  { id:'green_coral', bm:'Green Coral', zh:'青生菜', en:'Green Coral Lettuce', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:10.00}], unit:'kg'},
+  { id:'baby_romaine', bm:'Baby Romaine', zh:'罗马生菜', en:'Baby Romaine', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:7.00}], unit:'kg'},
+  { id:'cauliflower', bm:'Kobis Bunga', zh:'包菜花', en:'Cauliflower', cat:'leafy', emoji:'🥦',
+    variants:[{label:'Standard', price:9.00}], unit:'kg'},
+  { id:'broccoli', bm:'Broccoli', zh:'西兰花', en:'Broccoli', cat:'leafy', emoji:'🥦',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'celery', bm:'Celery / Daun Sop', zh:'芹菜', en:'Chinese Celery', cat:'leafy', emoji:'🌿',
+    variants:[{label:'Standard', price:6.80}], unit:'kg'},
+  { id:'daun_bawang', bm:'Daun Bawang', zh:'青葱', en:'Spring Onion', cat:'leafy', emoji:'🌿',
+    variants:[{label:'Standard', price:3.50}], unit:'kg'},
+
+  // GOURD
+  { id:'timun_jepun', bm:'Timun Jepun', zh:'日本黄瓜', en:'Japanese Cucumber', cat:'gourd', emoji:'🥒',
+    variants:[{label:'Standard', price:6.50},{label:'Grade B', price:3.50},{label:'Mini', price:6.00}], unit:'kg'},
+  { id:'timun', bm:'Timun', zh:'黄瓜', en:'Cucumber', cat:'gourd', emoji:'🥒',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'petula_ular', bm:'Petula Ular', zh:'角瓜', en:'Snake Gourd', cat:'gourd', emoji:'🥒',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'peria', bm:'Peria', zh:'苦瓜', en:'Bitter Gourd', cat:'gourd', emoji:'🥒',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'labu_siam', bm:'Labu Siam', zh:'白蒲', en:'Chayote', cat:'gourd', emoji:'🥒',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'labu_merah', bm:'Labu Merah', zh:'金瓜', en:'Pumpkin', cat:'gourd', emoji:'🎃',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'labu_kundor', bm:'Labu Kundor', zh:'冬瓜', en:'Winter Melon', cat:'gourd', emoji:'🫑',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'zucchini', bm:'Zucchini Hijau', zh:'西葫芦', en:'Zucchini Green', cat:'gourd', emoji:'🥒',
+    variants:[{label:'Standard', price:6.00}], unit:'kg'},
+  { id:'jagung', bm:'Jagung Muda', zh:'玉米芯', en:'Baby Corn', cat:'gourd', emoji:'🌽',
+    variants:[{label:'Standard', price:4.70}], unit:'kg'},
+
+  // ROOT
+  { id:'carrot', bm:'Carrot', zh:'红萝卜', en:'Carrot', cat:'root', emoji:'🥕',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'lobak', bm:'Lobak Putih', zh:'白萝卜', en:'White Radish', cat:'root', emoji:'🥕',
+    variants:[{label:'Standard', price:3.50},{label:'Grade B', price:1.50}], unit:'kg'},
+  { id:'ubi_keledek', bm:'Ubi Keledek', zh:'芋头', en:'Sweet Potato', cat:'root', emoji:'🍠',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'lotus_root', bm:'Lotus Root', zh:'莲藕', en:'Lotus Root', cat:'root', emoji:'🪷',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'seng_kuang', bm:'Seng Kuang', zh:'沙葛', en:'Jicama', cat:'root', emoji:'🥕',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'beet_root', bm:'Beet Root', zh:'甜菜根', en:'Beetroot', cat:'root', emoji:'🫐',
+    variants:[{label:'Standard', price:5.80},{label:'Grade B', price:3.50}], unit:'kg'},
+
+  // BEAN
+  { id:'kacang_panjang', bm:'Kacang Panjang', zh:'豆角', en:'Long Bean', cat:'bean', emoji:'🫘',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'kacang_buncis', bm:'Kacang Buncis', zh:'懵豆', en:'French Bean', cat:'bean', emoji:'🫘',
+    variants:[{label:'Standard', price:8.50}], unit:'kg'},
+  { id:'kacang_bendi', bm:'Kacang Bendi', zh:'羊角豆', en:'Okra', cat:'bean', emoji:'🫘',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'taugeh', bm:'Taugeh', zh:'芽菜', en:'Bean Sprout', cat:'bean', emoji:'🌱',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'petai', bm:'Petai', zh:'臭豆', en:'Stink Bean', cat:'bean', emoji:'🫘',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+
+  // HERB
+  { id:'halia_muda', bm:'Halia Muda', zh:'子姜', en:'Young Ginger', cat:'herb', emoji:'🫚',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'halia_tua', bm:'Halia Tua', zh:'老姜', en:'Old Ginger', cat:'herb', emoji:'🫚',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'langkuas', bm:'Lengkuas', zh:'蓝姜', en:'Galangal', cat:'herb', emoji:'🌿',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'kunyit', bm:'Kunyit', zh:'黄姜', en:'Turmeric', cat:'herb', emoji:'🟡',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'serai', bm:'Serai', zh:'香茅', en:'Lemongrass', cat:'herb', emoji:'🌿',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'daun_kari', bm:'Daun Kari', zh:'咖喱叶', en:'Curry Leaf', cat:'herb', emoji:'🌿',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'pudina', bm:'Pudina', zh:'薄荷叶', en:'Mint', cat:'herb', emoji:'🌿',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'limau_kasturi', bm:'Limau Kasturi', zh:'桔仔', en:'Calamansi', cat:'herb', emoji:'🍋',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+
+  // OTHER
+  { id:'terung_panjang', bm:'Terung Panjang', zh:'长茄', en:'Pearl Brinjal', cat:'other', emoji:'🍆',
+    variants:[{label:'AA Grade', price:5.50},{label:'Grade A', price:4.50},{label:'Grade B', price:3.00}], unit:'kg'},
+  { id:'bawang_merah', bm:'Bawang Merah', zh:'红葱', en:'Red Onion', cat:'other', emoji:'🧅',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'bawang_putih', bm:'Bawang Putih', zh:'蒜头', en:'Garlic', cat:'other', emoji:'🧄',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'cendawan', bm:'Cendawan', zh:'鲍鱼菇', en:'Mushroom', cat:'other', emoji:'🍄',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'tau_foo', bm:'Tau Foo', zh:'豆腐', en:'Tofu', cat:'other', emoji:'🫙',
+    variants:[{label:'Standard', price:null}], unit:'pcs'},
+  { id:'tau_foo_jepun', bm:'Tau Foo Jepun', zh:'日本豆腐', en:'Japanese Tofu', cat:'other', emoji:'🫙',
+    variants:[{label:'Standard', price:null}], unit:'pcs'},
+  { id:'rebung', bm:'Rebung Kuning', zh:'黄竹笋', en:'Bamboo Shoot', cat:'other', emoji:'🌿',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'nanas', bm:'Nanas', zh:'黄梨', en:'Pineapple', cat:'other', emoji:'🍍',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'sayur_raja', bm:'Sayur Raja', zh:'帝皇苗', en:'Sayur Raja', cat:'other', emoji:'🌿',
+    variants:[{label:'Standard', price:null}], unit:'kg'},
+  { id:'yau_mak_tam', bm:'Yau Mak Tam / Baby Romaine', zh:'油默旦', en:'Baby Romaine', cat:'leafy', emoji:'🥬',
+    variants:[{label:'Standard', price:7.00}], unit:'kg'},
+];
+
+// ===== LANGUAGE =====
+let currentLang = 'zh';
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(currentFilter, document.getElementById('searchInput').value);
+}
+
+// ===== STATE =====
+let cart = {};
+let currentFilter = 'all';
+
+function getName(p) {
+  if (currentLang === 'zh') return p.zh || p.bm;
+  if (currentLang === 'bm') return p.bm;
+  return p.en || p.bm;
+}
+
+// ===== RENDER PRODUCTS =====
+function renderProducts(cat, search) {
+  const container = document.getElementById('productList');
+  let filtered = PRODUCTS;
+  if (cat && cat !== 'all') filtered = filtered.filter(p => p.cat === cat);
+  if (search) {
+    const q = search.toLowerCase();
+    filtered = filtered.filter(p =>
+      p.bm.toLowerCase().includes(q) ||
+      p.zh.toLowerCase().includes(q) ||
+      p.en.toLowerCase().includes(q)
+    );
+  }
+
+  // Group by category
+  const cats = [
+    {key:'tomato', label:'🍅 番茄 Tomato'},
+    {key:'chili', label:'🌶 辣椒 Cili'},
+    {key:'leafy', label:'🥬 叶菜 Sayuran Hijau'},
+    {key:'gourd', label:'🥒 瓜果 Labu & Timun'},
+    {key:'root', label:'🥕 根茎 Ubi & Lobak'},
+    {key:'bean', label:'🫘 豆类 Kacang'},
+    {key:'herb', label:'🌿 香草 Herba & Rempah'},
+    {key:'other', label:'🧄 其他 Lain-lain'},
+  ];
+
+  let html = '';
+  for (const c of cats) {
+    const items = (cat === 'all' || cat === c.key) ? filtered.filter(p => p.cat === c.key) : [];
+    if (!items.length) continue;
+    html += `<div class="sec-hdr"><h3>${c.label}</h3><span class="count">${items.length}</span></div>`;
+    html += '<div class="product-list">';
+    for (const p of items) {
+      const inCart = cart[p.id];
+      const variantsHtml = p.variants.map((v,i) => {
+        const hasPrice = v.price !== null;
+        return `<span class="variant-pill ${hasPrice ? '' : 'no-price'}">
+          <span class="vp-label">${v.label}</span>
+          ${hasPrice ? `RM ${v.price.toFixed(2)}` : 'TBD'}
+        </span>`;
+      }).join('');
+      html += `
+        <div class="prod-card ${inCart ? 'in-cart' : ''}" id="pcard-${p.id}">
+          ${inCart ? '<div class="in-cart-dot"></div>' : ''}
+          <div class="prod-emoji">${p.emoji}</div>
+          <div class="prod-info">
+            <div class="prod-names">
+              <span class="prod-bm">${getName(p)}</span>
+              ${currentLang !== 'zh' ? `<span class="prod-zh">${p.zh}</span>` : `<span class="prod-zh">${p.bm}</span>`}
+            </div>
+            <div class="prod-en">${currentLang !== 'en' ? p.en : ''} · ${p.unit}</div>
+            <div class="prod-variants">${variantsHtml}</div>
+          </div>
+          <button class="add-btn ${inCart ? 'added' : ''}" onclick="quickAdd('${p.id}', event)">${inCart ? '✓' : '+'}</button>
+        </div>`;
+    }
+    html += '</div>';
+  }
+  if (!html) html = '<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px;">没有找到相关商品</div>';
+  container.innerHTML = html;
+}
+
+// ===== FILTER =====
+function filterCat(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts(cat, document.getElementById('searchInput').value);
+}
+function filterProducts() {
+  renderProducts(currentFilter, document.getElementById('searchInput').value);
+}
+
+// ===== CART =====
+function quickAdd(productId, e) {
+  e.stopPropagation();
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p) return;
+  const defaultVariant = p.variants.find(v => v.price !== null) || p.variants[0];
+  if (!cart[productId]) {
+    cart[productId] = { product: p, variant: defaultVariant, qty: 1 };
+  } else {
+    cart[productId].qty += 1;
+  }
+  updateCartUI();
+  renderProducts(currentFilter, document.getElementById('searchInput').value);
+}
+
+function updateCartUI() {
+  const items = Object.values(cart);
+  const totalItems = items.reduce((s, i) => s + i.qty, 0);
+  const totalAmt = items.reduce((s, i) => s + (i.variant.price || 0) * i.qty, 0);
+
+  document.getElementById('cart-badge').textContent = totalItems;
+  document.getElementById('cart-badge').style.display = totalItems > 0 ? 'flex' : 'none';
+
+  const fab = document.getElementById('cartFab');
+  fab.classList.toggle('visible', totalItems > 0);
+  document.getElementById('fabCount').textContent = totalItems + ' 品';
+  document.getElementById('fabTotal').textContent = 'RM ' + totalAmt.toFixed(2);
+
+  document.getElementById('cartItemCount').textContent = totalItems + ' 件';
+  document.getElementById('summaryItems').textContent = totalItems + ' 件';
+  document.getElementById('summaryTotal').textContent = 'RM ' + totalAmt.toFixed(2);
+
+  renderCartItems();
+}
+
+function renderCartItems() {
+  const container = document.getElementById('cartItems');
+  const items = Object.values(cart);
+  let html = `<div class="payment-notice">
+    <span class="payment-badge badge-kredit">账期</span>
+    <p>您的账户为账期付款。</p>
+  </div>`;
+  if (!items.length) {
+    html += '<div style="text-align:center; padding:60px 20px; color:var(--text-muted); font-size:14px;">购物车是空的<br>请返回首页选购</div>';
+  }
+  for (const item of items) {
+    const p = item.product;
+    const amt = (item.variant.price || 0) * item.qty;
+    html += `<div class="cart-item">
+      <div class="ci-top">
+        <div class="ci-emoji">${p.emoji}</div>
+        <div class="ci-name">
+          <div class="ci-bm">${p.zh} · ${p.bm}</div>
+          <div class="ci-variant">${item.variant.label} · RM ${item.variant.price ? item.variant.price.toFixed(2) : 'TBD'} / ${p.unit}</div>
+        </div>
+        <button class="ci-remove" onclick="removeItem('${p.id}')">✕</button>
+      </div>
+      <div class="ci-bottom">
+        <div class="ci-price">RM ${item.variant.price ? item.variant.price.toFixed(2) : '?'} × </div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty('${p.id}', -1)">−</button>
+          <input class="qty-input" type="number" value="${item.qty}" min="0.5" step="0.5"
+            onchange="setQty('${p.id}', this.value)">
+          <span class="qty-unit">${p.unit}</span>
+          <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+        </div>
+        <div class="ci-amount">RM ${amt.toFixed(2)}</div>
+      </div>
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+function removeItem(id) {
+  delete cart[id];
+  updateCartUI();
+  renderProducts(currentFilter, document.getElementById('searchInput').value);
+}
+function changeQty(id, delta) {
+  if (!cart[id]) return;
+  cart[id].qty = Math.max(0.5, cart[id].qty + delta);
+  updateCartUI();
+}
+function setQty(id, val) {
+  if (!cart[id]) return;
+  cart[id].qty = Math.max(0.5, parseFloat(val) || 1);
+  updateCartUI();
+}
+
+// ===== ORDER =====
+let orderCounter = 1;
+function placeOrder() {
+  const items = Object.values(cart);
+  if (!items.length) { alert('购物车是空的！'); return; }
+  const ref = '#0512-' + String(orderCounter++).padStart(3,'0');
+  document.getElementById('orderRef').textContent = ref;
+  cart = {};
+  updateCartUI();
+  showScreen('success');
+}
+
+// ===== NAVIGATION =====
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const s = document.getElementById('screen-' + name);
+  if (s) s.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach((n,i) => n.classList.remove('active'));
+  const map = {home:0, orders:1, 'cart-screen':2};
+  if (map[name] !== undefined) document.querySelectorAll('.nav-item')[map[name]]?.classList.add('active');
+}
+
+function goCart() { showScreen('cart-screen'); }
+
+// ===== INIT =====
+renderProducts('all', '');
+updateCartUI();
+</script>
+</body>
+</html>
