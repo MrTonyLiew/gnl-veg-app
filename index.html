@@ -2,1192 +2,1373 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>GNL Vegetable Trading</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --g1:#0f3d04;--g2:#1e6b0a;--g3:#2d9614;--g4:#5bbf3a;--g5:#c8edb8;--g6:#eaf5e4;
-  --amber:#d97706;--amber-bg:#fef3c7;
-  --red:#dc2626;--red-bg:#fee2e2;
-  --blue:#1d4ed8;--blue-bg:#dbeafe;
-  --bg:#f0f5ec;--white:#ffffff;
-  --t1:#111b0d;--t2:#3d5c30;--t3:#7a9a6a;--t4:#b0cba0;
-  --border:#d4e8c4;--border2:#e8f3e0;
-  --shadow:0 2px 16px rgba(15,61,4,.10);
-  --r:12px;--r2:8px;
+  --g1:#0d3805;--g2:#1a6008;--g3:#2a9010;--g4:#4aba28;--g5:#a8dda0;--g6:#e6f5e2;--g7:#f3faf0;
+  --amber:#c97b00;--amberbg:#fff8e6;--amberbd:#f5d06a;
+  --red:#c0251a;--redbg:#fdecea;
+  --blue:#1549b8;--bluebg:#e8eeff;
+  --purple:#7c3aed;--purplebg:#ede9fe;
+  --ink:#0e1c0b;--ink2:#2d4a28;--ink3:#5a7a54;--ink4:#9ab890;--ink5:#cde4c8;
+  --bg:#eef5eb;--surface:#ffffff;--surface2:#f6faf4;
+  --bd:#d0e8c8;--bd2:#e4f0df;
+  --sh:0 2px 16px rgba(13,56,5,.10);
+  --r:14px;--r2:10px;--r3:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Plus Jakarta Sans','Noto Sans SC',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;}
-.app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;background:var(--bg);}
-.screen{display:none;flex-direction:column;min-height:100vh;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Outfit','Noto Sans SC',sans-serif;background:var(--bg);color:var(--ink);}
+.app{max-width:430px;margin:0 auto;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
 .screen.active{display:flex;}
+.page-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.page-body::-webkit-scrollbar{display:none;}
 
-/* ===== LOGIN ===== */
+/* ── GROUP COLOR ACCENTS ── */
+.grp-A{--ga:#1549b8;--gabg:#e8eeff;--gabd:#b8ccff;}   /* 批发商 Wholesale */
+.grp-B{--ga:#c97b00;--gabg:#fff8e6;--gabd:#f5d06a;}   /* COD */
+.grp-C{--ga:#2a9010;--gabg:#e6f5e2;--gabd:#a8dda0;}   /* 账期 Credit */
+.grp-D{--ga:#7c3aed;--gabg:#ede9fe;--gabd:#c4b5fd;}   /* 散客 Walk-in */
+
+/* ════════════════════════════════════
+   LOGIN
+════════════════════════════════════ */
 .login-bg{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:32px 24px;
-  background:linear-gradient(160deg,var(--g1) 0%,var(--g2) 50%,#1a5a08 100%);
-  min-height:100vh;
+  padding:28px 24px;
+  background:linear-gradient(170deg,var(--g1) 0%,#0f4808 55%,#1a6008 100%);
+  overflow-y:auto;
 }
-.login-logo{
-  width:80px;height:80px;border-radius:20px;background:rgba(255,255,255,.15);
-  display:flex;align-items:center;justify-content:center;
-  font-size:36px;margin-bottom:16px;border:2px solid rgba(255,255,255,.25);
-  backdrop-filter:blur(8px);
-}
-.login-title{color:#fff;font-size:22px;font-weight:700;margin-bottom:4px;}
-.login-sub{color:rgba(255,255,255,.55);font-size:13px;margin-bottom:36px;}
-.login-card{background:var(--white);border-radius:20px;padding:24px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.2);}
-.lbl{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
-.inp{
-  width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r2);
-  font-size:14px;font-family:inherit;color:var(--t1);background:var(--bg);
-  outline:none;transition:border .15s;margin-bottom:14px;
-}
-.inp:focus{border-color:var(--g3);}
-.login-btn{
-  width:100%;padding:14px;background:var(--g1);color:#fff;border:none;
-  border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;
-  font-family:inherit;letter-spacing:.02em;transition:background .15s;margin-top:4px;
-}
+.login-logo{width:100px;height:100px;border-radius:24px;background:rgba(255,255,255,.12);
+  border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;
+  font-size:48px;margin-bottom:14px;box-shadow:0 8px 32px rgba(0,0,0,.3);}
+.login-title{color:#fff;font-size:20px;font-weight:800;text-align:center;}
+.login-sub{color:rgba(255,255,255,.5);font-size:12px;margin-bottom:28px;text-align:center;}
+.login-card{background:var(--surface);border-radius:20px;padding:22px 20px;width:100%;max-width:360px;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+.fl{font-size:11px;font-weight:700;color:var(--ink2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;}
+.fi{width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:var(--r2);
+  font-size:14px;font-family:inherit;color:var(--ink);background:var(--surface2);
+  outline:none;transition:border .15s;margin-bottom:14px;}
+.fi:focus{border-color:var(--g3);}
+.login-btn{width:100%;padding:14px;background:var(--g1);color:#fff;border:none;
+  border-radius:var(--r2);font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .15s;}
 .login-btn:hover{background:var(--g2);}
-.login-err{color:var(--red);font-size:12px;text-align:center;margin-top:8px;display:none;}
-.login-demo{margin-top:16px;text-align:center;font-size:11px;color:var(--t3);}
-.login-demo span{display:block;color:var(--t2);font-weight:600;}
+.login-err{color:#e05050;font-size:12px;text-align:center;margin-top:10px;display:none;font-weight:600;}
+.demo-hint{margin-top:18px;text-align:center;font-size:11px;color:rgba(255,255,255,.4);line-height:2;}
+.demo-hint b{color:rgba(255,255,255,.65);}
 
-/* ===== TOP BAR ===== */
-.topbar{background:var(--g1);padding:14px 16px 12px;position:sticky;top:0;z-index:100;}
-.topbar-r1{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand-logo-sm{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;letter-spacing:-1px;}
-.brand-name{color:#fff;font-size:15px;font-weight:700;line-height:1.1;}
-.brand-user{color:rgba(255,255,255,.5);font-size:11px;}
-.topbar-acts{display:flex;align-items:center;gap:8px;}
-.icon-btn{background:rgba(255,255,255,.12);border:none;border-radius:var(--r2);width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:17px;position:relative;transition:background .15s;}
-.icon-btn:hover{background:rgba(255,255,255,.22);}
-.cbadge{position:absolute;top:-4px;right:-4px;background:var(--amber);color:#fff;font-size:9px;font-weight:800;border-radius:10px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 3px;display:none;}
-.search-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 12px;}
-.search-wrap input{background:transparent;border:none;outline:none;color:#fff;font-size:13px;flex:1;font-family:inherit;}
-.search-wrap input::placeholder{color:rgba(255,255,255,.4);}
+/* ════════════════════════════════════
+   TOPBAR
+════════════════════════════════════ */
+.topbar{background:var(--g1);padding:12px 16px 10px;flex-shrink:0;}
+.tb-r1{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.tb-brand{display:flex;align-items:center;gap:10px;}
+.tb-logo{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(255,255,255,.2);}
+.tb-name{color:#fff;font-size:14px;font-weight:800;line-height:1.15;}
+.tb-user{color:rgba(255,255,255,.5);font-size:11px;margin-top:1px;}
+.tb-acts{display:flex;gap:7px;}
+.ib{background:rgba(255,255,255,.12);border:none;border-radius:var(--r3);width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px;position:relative;transition:background .15s;}
+.ib:hover{background:rgba(255,255,255,.22);}
+.cbadge{position:absolute;top:-5px;right:-5px;background:var(--amber);color:#fff;font-size:9px;font-weight:800;
+  border-radius:10px;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+.search-box{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 12px;}
+.search-box input{background:transparent;border:none;outline:none;color:#fff;font-size:13px;flex:1;font-family:inherit;}
+.search-box input::placeholder{color:rgba(255,255,255,.38);}
 
-/* ===== LANG TABS ===== */
-.lang-tabs{background:var(--white);border-bottom:1px solid var(--border2);display:flex;padding:0 16px;}
-.lt-btn{padding:10px 16px;border:none;background:transparent;font-size:13px;font-weight:600;cursor:pointer;color:var(--t3);border-bottom:2.5px solid transparent;transition:all .15s;font-family:inherit;}
-.lt-btn.active{color:var(--g2);border-bottom-color:var(--g3);}
-.lt-sep{flex:1;}
+.lang-strip{display:flex;background:var(--surface);border-bottom:1px solid var(--bd2);flex-shrink:0;}
+.ls-btn{flex:1;padding:9px 4px;border:none;background:transparent;font-size:12px;font-weight:700;cursor:pointer;
+  color:var(--ink4);border-bottom:2.5px solid transparent;transition:all .15s;font-family:inherit;}
+.ls-btn.active{color:var(--g2);border-bottom-color:var(--g3);}
+.ls-right{display:flex;align-items:center;padding:0 12px;font-size:10px;color:var(--ink4);border-left:1px solid var(--bd2);}
 
-/* ===== NOTICE ===== */
-.notice{background:var(--amber-bg);border-bottom:1px solid #fcd34d;padding:8px 16px;display:flex;align-items:center;gap:6px;font-size:12px;color:#78350f;}
-.notice strong{font-weight:700;}
+.notice-bar{background:var(--amberbg);border-bottom:1px solid var(--amberbd);padding:7px 16px;
+  display:flex;align-items:center;gap:6px;font-size:12px;color:#6b3d00;flex-shrink:0;}
 
-/* ===== DELIVERY DATE SELECTOR ===== */
-.date-bar{background:var(--white);border-bottom:1px solid var(--border2);padding:10px 16px;}
-.date-bar-label{font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+/* Surcharge notice */
+.surcharge-notice{background:#fff3cd;border-bottom:1px solid #ffc107;padding:5px 16px;
+  font-size:10px;color:#856404;flex-shrink:0;display:flex;align-items:center;gap:4px;}
+
+.date-bar{background:var(--surface);border-bottom:1px solid var(--bd2);padding:10px 16px;flex-shrink:0;}
+.date-bar-lbl{font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;}
 .date-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
 .date-chips::-webkit-scrollbar{display:none;}
-.date-chip{
-  min-width:56px;border-radius:10px;border:1.5px solid var(--border);
-  background:var(--bg);padding:5px 8px;text-align:center;cursor:pointer;transition:all .15s;flex-shrink:0;
-}
-.date-chip.active{border-color:var(--g3);background:var(--g6);}
-.dc-day{font-size:10px;color:var(--t3);font-weight:500;}
-.dc-date{font-size:14px;font-weight:700;color:var(--t1);}
-.dc-month{font-size:10px;color:var(--t3);}
-.date-chip.active .dc-day,.date-chip.active .dc-date,.date-chip.active .dc-month{color:var(--g2);}
-.date-chip.disabled{opacity:.35;pointer-events:none;}
+.dchip{min-width:52px;border-radius:10px;border:1.5px solid var(--bd);background:var(--bg);
+  padding:5px 7px;text-align:center;cursor:pointer;transition:all .15s;flex-shrink:0;}
+.dchip.active{border-color:var(--g3);background:var(--g6);}
+.dchip.dis{opacity:.3;pointer-events:none;}
+.dchip .dd{font-size:10px;color:var(--ink3);font-weight:600;}
+.dchip .dn{font-size:15px;font-weight:800;color:var(--ink);}
+.dchip .dm{font-size:10px;color:var(--ink3);}
+.dchip.active .dd,.dchip.active .dn,.dchip.active .dm{color:var(--g2);}
 
-/* ===== CATEGORY SCROLL ===== */
-.cat-scroll{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;background:var(--white);border-bottom:1px solid var(--border2);}
-.cat-scroll::-webkit-scrollbar{display:none;}
-.cat-chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;transition:all .15s;border:1.5px solid var(--border);background:var(--bg);color:var(--t2);}
-.cat-chip.active{background:var(--g1);color:#fff;border-color:var(--g1);}
+.cat-row{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;
+  background:var(--surface);border-bottom:1px solid var(--bd2);flex-shrink:0;}
+.cat-row::-webkit-scrollbar{display:none;}
+.cc{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;
+  transition:all .15s;border:1.5px solid var(--bd);background:var(--bg);color:var(--ink2);}
+.cc.active{background:var(--g1);color:#fff;border-color:var(--g1);}
 
-/* ===== SCROLL CONTENT ===== */
-.scroll-content{flex:1;overflow-y:auto;padding-bottom:88px;}
+.sec-hdr{padding:14px 16px 5px;display:flex;align-items:center;gap:8px;}
+.sec-hdr h3{font-size:11px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;}
+.sec-cnt{font-size:10px;color:var(--ink4);background:var(--g6);border-radius:10px;padding:1px 8px;font-weight:700;}
+.prod-list{padding:0 16px;display:flex;flex-direction:column;gap:5px;margin-bottom:2px;}
 
-/* ===== SECTION HDR ===== */
-.sec-hdr{padding:14px 16px 6px;display:flex;align-items:center;gap:8px;}
-.sec-hdr h3{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;}
-.sec-count{font-size:11px;color:var(--t4);background:var(--g6);border-radius:10px;padding:1px 7px;}
+.pcard{background:var(--surface);border-radius:var(--r);border:1.5px solid var(--bd2);
+  padding:11px 13px;display:flex;align-items:stretch;gap:10px;transition:all .15s;position:relative;}
+.pcard.in-cart{border-color:var(--g4);background:var(--g7);}
+.pcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;border-radius:3px 0 0 3px;transition:all .15s;}
+.pcard.in-cart::before{background:var(--g3);}
+.pc-emoji{font-size:28px;min-width:38px;display:flex;align-items:center;justify-content:center;}
+.pc-info{flex:1;min-width:0;}
+.pc-main{font-size:14px;font-weight:700;color:var(--ink);}
+.pc-subs{display:flex;gap:5px;margin-top:2px;flex-wrap:wrap;}
+.pc-sub{font-size:11px;color:var(--ink3);}
+.pc-variants{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+.vrow{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.vrow-lbl{font-size:12px;font-weight:600;color:var(--ink2);flex:1;}
+.qstep{display:flex;align-items:center;gap:4px;}
+.qb{width:27px;height:27px;border-radius:7px;border:1.5px solid var(--g5);background:var(--g6);
+  color:var(--g2);font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;flex-shrink:0;line-height:1;}
+.qb:hover{background:var(--g5);border-color:var(--g2);}
+.qb:disabled{opacity:.25;cursor:not-allowed;}
+.qi{width:40px;height:27px;border:1.5px solid var(--g5);border-radius:7px;text-align:center;
+  font-size:13px;font-weight:800;color:var(--g1);font-family:inherit;background:var(--g6);outline:none;}
+.qi:focus{border-color:var(--g2);}
+.qu{font-size:10px;color:var(--ink3);font-weight:600;}
 
-/* ===== PRODUCT CARDS ===== */
-.prod-list{padding:0 16px;display:flex;flex-direction:column;gap:6px;margin-bottom:4px;}
-.prod-card{
-  background:var(--white);border-radius:var(--r);border:1.5px solid var(--border2);
-  padding:12px 14px;display:flex;align-items:stretch;gap:10px;
-  transition:all .15s;position:relative;overflow:hidden;
-}
-.prod-card.has-item{border-color:var(--g4);background:#f5fcf0;}
-.prod-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;border-radius:3px 0 0 3px;transition:background .15s;}
-.prod-card.has-item::before{background:var(--g3);}
-.prod-emoji{font-size:28px;min-width:38px;display:flex;align-items:center;justify-content:center;}
-.prod-info{flex:1;min-width:0;}
-.prod-main-name{font-size:14px;font-weight:700;color:var(--t1);}
-.prod-sub-names{display:flex;gap:6px;margin-top:2px;flex-wrap:wrap;}
-.prod-sub-nm{font-size:11px;color:var(--t3);}
-.prod-variants{display:flex;flex-direction:column;gap:4px;margin-top:8px;}
-.variant-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.vr-label{font-size:12px;color:var(--t2);font-weight:500;flex:1;}
-.vr-price{font-size:13px;font-weight:700;color:var(--g2);min-width:60px;text-align:right;}
-.vr-price.tbd{color:var(--t4);font-weight:500;font-style:italic;}
-/* QUANTITY STEPPER inline */
-.qty-stepper{display:flex;align-items:center;gap:4px;}
-.qs-btn{width:26px;height:26px;border-radius:7px;border:1.5px solid var(--g4);background:var(--g6);color:var(--g2);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
-.qs-btn:hover{background:var(--g5);border-color:var(--g2);}
-.qs-btn:disabled{opacity:.3;cursor:not-allowed;}
-.qs-input{width:38px;height:26px;border:1.5px solid var(--g4);border-radius:7px;text-align:center;font-size:13px;font-weight:700;color:var(--g1);font-family:inherit;background:var(--g6);outline:none;}
-.qs-input:focus{border-color:var(--g2);}
-.qs-unit{font-size:10px;color:var(--t3);font-weight:500;}
+.cart-fab{position:absolute;bottom:74px;left:16px;right:16px;background:var(--g1);border-radius:var(--r);
+  padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+  box-shadow:0 6px 28px rgba(13,56,5,.35);transition:all .25s;z-index:50;
+  opacity:0;pointer-events:none;transform:translateY(8px);}
+.cart-fab.show{opacity:1;pointer-events:all;transform:translateY(0);}
+.fab-l{display:flex;align-items:center;gap:10px;}
+.fab-badge{background:var(--amber);color:#fff;font-size:11px;font-weight:800;padding:2px 9px;border-radius:20px;}
+.fab-lbl{color:rgba(255,255,255,.7);font-size:13px;}
+.fab-r{color:#fff;font-size:14px;font-weight:800;}
 
-/* ===== CART FAB ===== */
-.cart-fab{
-  position:fixed;bottom:72px;left:50%;transform:translateX(-50%);
-  max-width:398px;width:calc(100% - 32px);
-  background:var(--g1);border-radius:var(--r);padding:13px 18px;
-  display:flex;align-items:center;justify-content:space-between;
-  cursor:pointer;box-shadow:0 6px 28px rgba(15,61,4,.35);
-  transition:all .25s;z-index:90;opacity:0;pointer-events:none;
-  transform:translateX(-50%) translateY(10px);
-}
-.cart-fab.visible{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0);}
-.cfab-left{display:flex;align-items:center;gap:10px;}
-.cfab-badge{background:var(--amber);color:#fff;font-size:11px;font-weight:800;padding:2px 9px;border-radius:20px;}
-.cfab-lbl{color:rgba(255,255,255,.75);font-size:13px;}
-.cfab-total{color:#fff;font-size:15px;font-weight:700;}
+.bnav{background:var(--surface);border-top:1px solid var(--bd);display:flex;padding:5px 0 12px;flex-shrink:0;}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:3px;
+  color:var(--ink4);font-size:10px;font-weight:700;transition:color .15s;}
+.ni.active{color:var(--g2);}
+.ni-icon{font-size:22px;line-height:1;}
 
-/* ===== BOTTOM NAV ===== */
-.bottom-nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  max-width:430px;width:100%;background:var(--white);
-  border-top:1px solid var(--border);display:flex;padding:6px 0 12px;z-index:100;
-}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px;color:var(--t4);font-size:10px;font-weight:600;transition:color .15s;}
-.nav-item.active{color:var(--g2);}
-.nav-icon{font-size:22px;line-height:1;}
+/* ════════════════════════════════════
+   CART SCREEN
+════════════════════════════════════ */
+.sub-hdr{background:var(--g1);padding:13px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.bk{background:rgba(255,255,255,.15);border:none;border-radius:var(--r3);width:36px;height:36px;
+  color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.sub-hdr h2{color:#fff;font-size:15px;font-weight:800;flex:1;}
+.sub-hdr-r{color:rgba(255,255,255,.55);font-size:13px;}
 
-/* ===== CART SCREEN ===== */
-.sub-header{background:var(--g1);padding:14px 16px;display:flex;align-items:center;gap:12px;}
-.back-btn{background:rgba(255,255,255,.15);border:none;border-radius:var(--r2);width:36px;height:36px;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.sub-header h2{color:#fff;font-size:16px;font-weight:700;flex:1;}
-.sub-header-right{color:rgba(255,255,255,.6);font-size:13px;}
-
-.cart-content{flex:1;overflow-y:auto;padding:12px 16px;padding-bottom:200px;}
-.cart-delivery-info{background:var(--blue-bg);border:1px solid #bfdbfe;border-radius:var(--r);padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.cart-del-info{background:var(--bluebg);border:1px solid #b8ccff;border-radius:var(--r);
+  padding:12px 14px;margin:12px 16px 8px;display:flex;gap:10px;align-items:center;}
 .cdi-icon{font-size:22px;}
-.cdi-info{flex:1;}
-.cdi-label{font-size:11px;color:var(--blue);font-weight:600;}
-.cdi-val{font-size:14px;font-weight:700;color:var(--t1);}
-.pay-type-row{background:var(--g6);border:1px solid var(--g5);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.pay-badge{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;}
-.badge-kredit{background:var(--blue-bg);color:var(--blue);}
-.badge-cod{background:var(--amber-bg);color:var(--amber);}
-.pay-type-row p{font-size:12px;color:var(--t2);}
-.empty-cart{text-align:center;padding:60px 20px;color:var(--t4);}
-.empty-cart .ec-icon{font-size:48px;margin-bottom:12px;}
-.empty-cart p{font-size:14px;}
+.cdi-lbl{font-size:10px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.cdi-val{font-size:14px;font-weight:800;color:var(--ink);}
 
-.cart-item-card{background:var(--white);border:1.5px solid var(--border2);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.pay-strip{border-radius:var(--r);padding:10px 14px;margin:0 16px 10px;display:flex;align-items:center;gap:8px;}
+.pay-lbl{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:800;}
+.lbl-A{background:var(--bluebg);color:var(--blue);}
+.lbl-B{background:var(--amberbg);color:var(--amber);}
+.lbl-C{background:var(--g6);color:var(--g2);}
+.lbl-D{background:var(--purplebg);color:var(--purple);}
+.pay-desc{font-size:12px;color:var(--ink2);}
+
+.ci-card{background:var(--surface);border:1.5px solid var(--bd2);border-radius:var(--r);padding:12px 14px;margin:0 16px 7px;}
 .ci-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
 .ci-emoji{font-size:22px;}
-.ci-info{flex:1;}
-.ci-name{font-size:13px;font-weight:700;color:var(--t1);}
-.ci-variant{font-size:11px;color:var(--t3);margin-top:1px;}
-.ci-remove{background:none;border:none;color:var(--t4);cursor:pointer;font-size:16px;padding:2px 4px;transition:color .15s;}
-.ci-remove:hover{color:var(--red);}
-.ci-bottom{display:flex;align-items:center;justify-content:space-between;}
-.ci-unit-price{font-size:12px;color:var(--g2);font-weight:600;}
-.ci-qty-row{display:flex;align-items:center;gap:5px;}
-.ci-amount{font-size:15px;font-weight:800;color:var(--g1);}
+.ci-meta{flex:1;}
+.ci-name{font-size:13px;font-weight:700;}
+.ci-variant{font-size:11px;color:var(--ink3);margin-top:1px;}
+.ci-rm{background:none;border:none;color:var(--ink4);cursor:pointer;font-size:16px;padding:2px 4px;transition:color .15s;}
+.ci-rm:hover{color:var(--red);}
+.ci-bot{display:flex;align-items:center;justify-content:space-between;}
+.ci-note{font-size:11px;color:var(--ink3);}
+.ci-amt{font-size:15px;font-weight:800;color:var(--g1);}
 
-.note-section{padding:0 16px 12px;}
-.note-label{font-size:12px;color:var(--t2);font-weight:600;margin-bottom:6px;}
-.note-ta{width:100%;border:1.5px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:13px;font-family:inherit;color:var(--t1);resize:none;background:var(--white);outline:none;transition:border .15s;}
+.note-wrap{padding:0 16px 10px;}
+.note-lbl{font-size:11px;font-weight:700;color:var(--ink2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;}
+.note-ta{width:100%;border:1.5px solid var(--bd);border-radius:var(--r);padding:10px 12px;
+  font-size:13px;font-family:inherit;color:var(--ink);resize:none;background:var(--surface);outline:none;}
 .note-ta:focus{border-color:var(--g3);}
 
-.cart-footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:430px;width:100%;background:var(--white);border-top:1.5px solid var(--border);padding:14px 16px 20px;}
-.sum-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;}
-.sum-lbl{font-size:13px;color:var(--t3);}
-.sum-val{font-size:13px;font-weight:600;color:var(--t1);}
-.sum-total-row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border2);padding-top:10px;margin-top:6px;}
-.sum-total-lbl{font-size:15px;font-weight:700;color:var(--t1);}
-.sum-total-val{font-size:22px;font-weight:800;color:var(--g1);}
-.order-btn{width:100%;margin-top:12px;background:var(--g1);color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}
+/* Surcharge row in cart footer */
+.surcharge-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;
+  background:var(--amberbg);border-radius:6px;padding:6px 10px;margin-bottom:4px;}
+.surcharge-lbl{font-size:12px;color:var(--amber);font-weight:700;}
+.surcharge-val{font-size:12px;color:var(--amber);font-weight:700;}
+
+.cart-footer{background:var(--surface);border-top:1.5px solid var(--bd);padding:12px 16px 18px;flex-shrink:0;}
+.cf-row{display:flex;justify-content:space-between;padding:3px 0;font-size:13px;}
+.cf-lbl{color:var(--ink3);}
+.cf-val{font-weight:600;}
+.cf-total-row{display:flex;justify-content:space-between;border-top:1px solid var(--bd2);padding-top:10px;margin-top:6px;align-items:baseline;}
+.cf-total-lbl{font-size:15px;font-weight:700;}
+.cf-total-val{font-size:18px;font-weight:800;color:var(--g1);}
+.order-btn{width:100%;margin-top:12px;background:var(--g1);color:#fff;border:none;border-radius:var(--r);
+  padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .15s;}
 .order-btn:hover{background:var(--g2);}
-.order-btn:disabled{background:var(--t4);cursor:not-allowed;}
+.small-surcharge-note{font-size:10px;color:var(--ink3);text-align:center;margin-top:6px;}
 
-/* ===== SUCCESS ===== */
+/* success */
 .success-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;}
-.success-anim{width:80px;height:80px;border-radius:50%;background:var(--g5);border:3px solid var(--g4);display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:20px;animation:pop .4s ease;}
-@keyframes pop{0%{transform:scale(.5);opacity:0}80%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
-.success-title{font-size:22px;font-weight:800;color:var(--g1);margin-bottom:8px;}
-.success-sub{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
-.order-ref-box{background:var(--g6);border:1px solid var(--g5);border-radius:var(--r);padding:12px 24px;margin-bottom:24px;}
-.order-ref-label{font-size:11px;color:var(--t3);font-weight:600;}
-.order-ref-no{font-size:20px;font-weight:800;color:var(--g1);}
-.home-btn{background:var(--g1);color:#fff;border:none;border-radius:var(--r);padding:14px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.succ-icon{width:82px;height:82px;border-radius:50%;background:var(--g5);border:3px solid var(--g4);
+  display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:20px;animation:pop .4s ease;}
+@keyframes pop{0%{transform:scale(.4);opacity:0}80%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.succ-title{font-size:22px;font-weight:800;color:var(--g1);margin-bottom:8px;}
+.succ-sub{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:20px;}
+.ref-box{background:var(--g6);border:1px solid var(--g5);border-radius:var(--r);padding:12px 28px;margin-bottom:24px;}
+.ref-lbl{font-size:10px;color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+.ref-no{font-size:20px;font-weight:800;color:var(--g1);}
+.home-btn{background:var(--g1);color:#fff;border:none;border-radius:var(--r);padding:13px 36px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;}
 
-/* ===== ORDERS SCREEN ===== */
-.orders-hdr{background:var(--g1);padding:14px 16px;}
-.orders-hdr h2{color:#fff;font-size:16px;font-weight:700;margin-bottom:2px;}
-.orders-hdr p{color:rgba(255,255,255,.5);font-size:12px;}
-.filter-row{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;}
-.filter-row::-webkit-scrollbar{display:none;}
-.filter-chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:var(--bg);color:var(--t2);white-space:nowrap;cursor:pointer;transition:all .15s;}
-.filter-chip.active{background:var(--g1);color:#fff;border-color:var(--g1);}
-.monthly-card{background:var(--g6);border:1px solid var(--g5);border-radius:var(--r);margin:0 16px 10px;padding:14px;}
-.mc-title{font-size:12px;font-weight:700;color:var(--g2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
-.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.mc-item .mc-val{font-size:20px;font-weight:800;color:var(--g1);}
-.mc-item .mc-lbl{font-size:11px;color:var(--t3);}
-.order-card{background:var(--white);border:1.5px solid var(--border2);border-radius:var(--r);margin:0 16px 8px;padding:14px;cursor:pointer;transition:all .15s;}
-.order-card:hover{border-color:var(--g4);box-shadow:var(--shadow);}
-.oc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
-.oc-no{font-size:14px;font-weight:800;color:var(--t1);}
-.oc-date{font-size:11px;color:var(--t3);margin-top:2px;}
-.oc-delivery{font-size:11px;color:var(--blue);margin-top:1px;font-weight:600;}
-.status-pill{padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700;}
-.sp-pending{background:var(--amber-bg);color:var(--amber);}
-.sp-confirmed{background:var(--blue-bg);color:var(--blue);}
+/* ════════════════════════════════════
+   ORDERS SCREEN
+════════════════════════════════════ */
+.filter-scroll{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;}
+.filter-scroll::-webkit-scrollbar{display:none;}
+.fc{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--bd);
+  background:var(--bg);color:var(--ink2);white-space:nowrap;cursor:pointer;transition:all .15s;}
+.fc.active{background:var(--g1);color:#fff;border-color:var(--g1);}
+
+.month-summary{background:var(--g6);border:1px solid var(--g5);border-radius:var(--r);margin:0 16px 10px;padding:14px;}
+.ms-title{font-size:11px;font-weight:800;color:var(--g2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;}
+.ms-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ms-v{font-size:20px;font-weight:800;color:var(--g1);}
+.ms-l{font-size:11px;color:var(--ink3);}
+
+/* expandable order card */
+.order-card{background:var(--surface);border:1.5px solid var(--bd2);border-radius:var(--r);margin:0 16px 7px;overflow:hidden;transition:border-color .15s;}
+.order-card.expanded{border-color:var(--g4);}
+.oc-header{padding:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.oc-header:hover{background:var(--g7);}
+.oc-left{flex:1;}
+.oc-no{font-size:13px;font-weight:800;}
+.oc-date{font-size:11px;color:var(--ink3);margin-top:1px;}
+.oc-deldate{font-size:11px;color:var(--blue);font-weight:700;margin-top:1px;}
+.oc-preview{font-size:11px;color:var(--ink3);margin-top:4px;line-height:1.4;}
+.oc-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.sp{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:800;}
+.sp-pending{background:var(--amberbg);color:var(--amber);}
+.sp-confirmed{background:var(--bluebg);color:var(--blue);}
 .sp-delivered{background:var(--g6);color:var(--g2);}
-.sp-cancelled{background:var(--red-bg);color:var(--red);}
-.oc-items{font-size:12px;color:var(--t2);margin-bottom:8px;line-height:1.5;}
-.oc-bottom{display:flex;justify-content:space-between;align-items:center;}
-.oc-total-lbl{font-size:11px;color:var(--t3);}
-.oc-total{font-size:17px;font-weight:800;color:var(--g1);}
+.sp-cancelled{background:var(--redbg);color:var(--red);}
+.oc-total{font-size:15px;font-weight:800;color:var(--g1);}
+.oc-expand-icon{font-size:14px;color:var(--ink4);transition:transform .2s;}
+.order-card.expanded .oc-expand-icon{transform:rotate(180deg);}
 
-/* ===== ADMIN SCREEN ===== */
-.admin-hdr{background:linear-gradient(135deg,var(--g1),#0a2a00);padding:16px;display:flex;align-items:center;justify-content:space-between;}
-.admin-hdr-left h2{color:#fff;font-size:16px;font-weight:700;}
-.admin-hdr-left p{color:rgba(255,255,255,.5);font-size:12px;}
-.admin-tabs{background:var(--white);display:flex;border-bottom:1px solid var(--border2);}
-.at-btn{flex:1;padding:10px 6px;border:none;background:transparent;font-size:12px;font-weight:700;cursor:pointer;color:var(--t3);border-bottom:2.5px solid transparent;transition:all .15s;font-family:inherit;text-align:center;}
-.at-btn.active{color:var(--g2);border-bottom-color:var(--g3);}
-.admin-panel{display:none;flex:1;overflow-y:auto;padding-bottom:80px;}
-.admin-panel.active{display:block;}
+.oc-body{display:none;border-top:1px solid var(--bd2);}
+.order-card.expanded .oc-body{display:block;}
+.oc-items-list{padding:10px 13px;}
+.oc-item-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd2);}
+.oc-item-row:last-child{border-bottom:none;}
+.oc-item-name{font-size:12px;font-weight:600;color:var(--ink);flex:1;}
+.oc-item-variant{font-size:10px;color:var(--ink3);}
+.oc-item-qty{font-size:13px;font-weight:700;color:var(--g1);min-width:40px;text-align:right;}
+.oc-footer{background:var(--g7);padding:10px 13px;display:flex;justify-content:space-between;align-items:center;}
+.oc-pay{font-size:11px;color:var(--ink3);}
+.oc-total-big{font-size:16px;font-weight:800;color:var(--g1);}
 
-/* Admin metrics */
-.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px;}
-.metric-card{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);padding:14px;}
-.mc-v{font-size:24px;font-weight:800;color:var(--g1);}
-.mc-l{font-size:11px;color:var(--t3);margin-top:2px;}
-.metrics-wide{padding:0 16px 8px;}
-.metric-wide{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);padding:14px;display:flex;justify-content:space-between;align-items:center;}
-.mw-label{font-size:13px;color:var(--t2);}
-.mw-val{font-size:20px;font-weight:800;color:var(--g1);}
+/* ════════════════════════════════════
+   ADMIN SCREEN
+════════════════════════════════════ */
+.admin-hdr{background:linear-gradient(135deg,var(--g1) 0%,#0a2a02 100%);
+  padding:14px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.admin-hdr-l h2{color:#fff;font-size:15px;font-weight:800;}
+.admin-hdr-l p{color:rgba(255,255,255,.45);font-size:11px;margin-top:1px;}
+.admin-tabs{background:var(--surface);display:flex;border-bottom:1px solid var(--bd2);flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.admin-tabs::-webkit-scrollbar{display:none;}
+.at{flex:1;min-width:58px;padding:10px 4px;border:none;background:transparent;font-size:11px;font-weight:800;
+  cursor:pointer;color:var(--ink3);border-bottom:2.5px solid transparent;transition:all .15s;font-family:inherit;text-align:center;white-space:nowrap;}
+.at.active{color:var(--g2);border-bottom-color:var(--g3);}
+.ap{display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px;}
+.ap::-webkit-scrollbar{display:none;}
+.ap.active{display:block;}
 
-/* Admin orders */
-.admin-order-item{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);margin:0 16px 8px;padding:12px 14px;}
-.aoi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
-.aoi-shop{font-size:14px;font-weight:700;color:var(--t1);}
-.aoi-no{font-size:11px;color:var(--t3);margin-top:1px;}
-.aoi-delivery{font-size:11px;color:var(--blue);font-weight:600;}
-.aoi-items{font-size:12px;color:var(--t2);margin-bottom:8px;line-height:1.5;}
-.aoi-bottom{display:flex;justify-content:space-between;align-items:center;}
-.aoi-total{font-size:16px;font-weight:800;color:var(--g1);}
-.status-select{padding:4px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:11px;font-weight:700;font-family:inherit;background:var(--bg);color:var(--t1);cursor:pointer;}
-.export-btn-row{padding:12px 16px 6px;}
-.export-btn{width:100%;padding:13px;background:var(--g1);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;}
-.export-btn:hover{background:var(--g2);}
-.export-btn-outline{background:var(--white);color:var(--g2);border:1.5px solid var(--g4);}
-.export-btn-outline:hover{background:var(--g6);}
+/* metrics */
+.a-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px 6px;}
+.a-metric{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r);padding:14px;}
+.am-v{font-size:26px;font-weight:800;color:var(--g1);}
+.am-l{font-size:11px;color:var(--ink3);margin-top:2px;}
+.a-metrics-wide{padding:0 16px 10px;}
+.amw{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
+.amw-l{font-size:13px;color:var(--ink2);font-weight:600;}
+.amw-v{font-size:22px;font-weight:800;color:var(--g1);}
 
-/* Admin price editor */
-.price-section-hdr{padding:12px 16px 4px;font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;}
-.price-item{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);margin:0 16px 6px;padding:12px 14px;}
-.pi-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+/* admin section header */
+.a-sec-hdr{padding:10px 16px 4px;font-size:10px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;}
+
+/* ── EXPANDABLE ADMIN ORDER CARD ── */
+.aoi{background:var(--surface);border:1.5px solid var(--bd2);border-radius:var(--r);margin:0 16px 8px;overflow:hidden;transition:border-color .2s;}
+.aoi.expanded{border-color:var(--g4);}
+.aoi-header{padding:12px 13px;cursor:pointer;}
+.aoi-header:hover{background:var(--g7);}
+.aoi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.aoi-shop{font-size:14px;font-weight:800;}
+.aoi-no{font-size:11px;color:var(--ink3);}
+.aoi-del{font-size:11px;color:var(--blue);font-weight:700;margin-top:1px;}
+.aoi-preview{font-size:11px;color:var(--ink2);margin-top:4px;line-height:1.4;}
+.aoi-meta-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.aoi-pay{font-size:10px;color:var(--ink3);}
+.aoi-grp-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;}
+.aoi-actions{display:flex;align-items:center;gap:8px;}
+.aoi-expand-icon{font-size:14px;color:var(--ink4);transition:transform .2s;}
+.aoi.expanded .aoi-expand-icon{transform:rotate(180deg);}
+
+/* status select styled */
+.status-sel{padding:6px 10px;border:1.5px solid var(--bd);border-radius:var(--r3);
+  font-size:11px;font-weight:800;font-family:inherit;background:var(--surface2);color:var(--ink);cursor:pointer;outline:none;}
+
+/* aoi expanded body */
+.aoi-body{display:none;border-top:1px solid var(--bd2);}
+.aoi.expanded .aoi-body{display:block;}
+.aoi-items-edit{padding:10px 13px;}
+.aoi-item-edit-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd2);}
+.aoi-item-edit-row:last-child{border-bottom:none;}
+.aie-info{flex:1;}
+.aie-name{font-size:12px;font-weight:700;}
+.aie-variant{font-size:10px;color:var(--ink3);}
+.aie-qty-row{display:flex;align-items:center;gap:4px;}
+.aie-price-row{display:flex;align-items:center;gap:4px;margin-top:4px;}
+.aie-label{font-size:10px;color:var(--ink3);min-width:28px;}
+.admin-inp{width:68px;padding:5px 7px;border:1.5px solid var(--bd);border-radius:6px;
+  font-size:12px;font-weight:700;text-align:right;font-family:inherit;color:var(--g1);background:var(--g6);outline:none;}
+.admin-inp:focus{border-color:var(--g3);}
+.admin-inp.changed{border-color:var(--amber);background:var(--amberbg);}
+
+.aoi-footer{background:var(--g7);border-top:1px solid var(--bd2);padding:10px 13px;}
+.aoi-total-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.aoi-total-lbl{font-size:12px;color:var(--ink2);font-weight:600;}
+.aoi-total-val{font-size:16px;font-weight:800;color:var(--g1);}
+.aoi-total-inp{width:100px;padding:6px 10px;border:1.5px solid var(--bd);border-radius:var(--r3);
+  font-size:14px;font-weight:800;text-align:right;font-family:inherit;color:var(--g1);background:var(--g6);outline:none;}
+.aoi-total-inp:focus{border-color:var(--g3);}
+.aoi-surcharge{font-size:11px;color:var(--amber);font-weight:700;background:var(--amberbg);border-radius:6px;padding:4px 8px;display:flex;align-items:center;gap:4px;}
+.aoi-status-row{display:flex;align-items:center;gap:8px;}
+.aoi-status-lbl{font-size:11px;color:var(--ink3);font-weight:600;}
+.aoi-save-btn{flex:1;padding:8px 12px;background:var(--g1);color:#fff;border:none;border-radius:var(--r3);
+  font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;transition:background .15s;}
+.aoi-save-btn:hover{background:var(--g2);}
+
+/* ── PRICE EDITOR ── */
+.grp-tabs{display:flex;gap:0;padding:10px 16px 6px;border-bottom:1px solid var(--bd2);background:var(--surface);}
+.grp-tab{flex:1;padding:8px 4px;border:none;background:var(--bg);font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;
+  color:var(--ink3);border:1.5px solid var(--bd);text-align:center;transition:all .15s;}
+.grp-tab:first-child{border-radius:var(--r3) 0 0 var(--r3);}
+.grp-tab:last-child{border-radius:0 var(--r3) var(--r3) 0;}
+.grp-tab:not(:first-child){border-left:none;}
+.grp-tab.active-A{background:var(--bluebg);color:var(--blue);border-color:var(--blue);}
+.grp-tab.active-B{background:var(--amberbg);color:var(--amber);border-color:var(--amber);}
+.grp-tab.active-C{background:var(--g6);color:var(--g2);border-color:var(--g3);}
+.grp-tab.active-D{background:var(--purplebg);color:var(--purple);border-color:var(--purple);}
+.grp-desc{padding:8px 16px;font-size:11px;border-radius:0;display:flex;align-items:center;gap:6px;}
+.grp-desc-A{background:var(--bluebg);color:var(--blue);}
+.grp-desc-B{background:var(--amberbg);color:var(--amber);}
+.grp-desc-C{background:var(--g6);color:var(--g2);}
+.grp-desc-D{background:var(--purplebg);color:var(--purple);}
+
+.pi{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r);margin:0 16px 6px;padding:11px 13px;}
+.pi-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
 .pi-emoji{font-size:22px;}
 .pi-names{flex:1;}
-.pi-bm{font-size:13px;font-weight:700;color:var(--t1);}
-.pi-zh{font-size:11px;color:var(--t3);}
-.pi-variants{display:flex;flex-direction:column;gap:6px;}
-.piv-row{display:flex;align-items:center;gap:8px;}
-.piv-label{font-size:12px;color:var(--t2);flex:1;}
-.price-inp-wrap{display:flex;align-items:center;gap:4px;}
-.price-inp-wrap span{font-size:12px;color:var(--t3);}
-.price-inp{width:70px;padding:6px 8px;border:1.5px solid var(--border);border-radius:var(--r2);font-size:13px;font-weight:700;text-align:right;font-family:inherit;color:var(--g1);background:var(--g6);outline:none;transition:border .15s;}
-.price-inp:focus{border-color:var(--g3);}
-.price-inp.changed{border-color:var(--amber);background:var(--amber-bg);}
-.piv-unit{font-size:11px;color:var(--t3);min-width:20px;}
-.save-prices-btn{position:sticky;bottom:72px;margin:8px 16px;width:calc(100% - 32px);padding:14px;background:var(--g1);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 20px rgba(15,61,4,.3);display:flex;align-items:center;justify-content:center;gap:8px;}
-.save-toast{display:none;text-align:center;font-size:12px;color:var(--g2);padding:6px;font-weight:600;}
+.pi-bm{font-size:13px;font-weight:700;}
+.pi-zh{font-size:11px;color:var(--ink3);}
+.pi-vrows{display:flex;flex-direction:column;gap:6px;}
+.pi-vr{display:flex;align-items:center;gap:8px;}
+.pi-vl{font-size:12px;color:var(--ink2);flex:1;font-weight:600;}
+.pinp-wrap{display:flex;align-items:center;gap:4px;}
+.pinp-wrap span{font-size:12px;color:var(--ink3);}
+.pinp{width:72px;padding:6px 8px;border:1.5px solid var(--bd);border-radius:var(--r3);
+  font-size:13px;font-weight:700;text-align:right;font-family:inherit;color:var(--g1);background:var(--g6);outline:none;}
+.pinp:focus{border-color:var(--g3);}
+.pinp.ch{border-color:var(--amber);background:var(--amberbg);}
+.pi-unit{font-size:10px;color:var(--ink3);min-width:20px;}
+.save-prices-bar{background:var(--surface);border-top:1px solid var(--bd2);padding:10px 16px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;position:sticky;bottom:0;}
+.save-prices-btn{flex:1;padding:13px;background:var(--g1);color:#fff;border:none;border-radius:var(--r);
+  font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s;}
+.save-prices-btn:hover{background:var(--g2);}
+.save-toast{display:none;font-size:11px;color:var(--g2);font-weight:700;text-align:center;}
 
-/* Admin customer mgmt */
-.cust-item{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);margin:0 16px 6px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
-.cust-avatar{width:40px;height:40px;border-radius:10px;background:var(--g5);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--g1);}
-.cust-info{flex:1;}
-.cust-name{font-size:13px;font-weight:700;color:var(--t1);}
-.cust-meta{font-size:11px;color:var(--t3);margin-top:1px;}
-.cust-right{text-align:right;}
-.cust-type{font-size:11px;font-weight:700;}
-.cust-balance{font-size:13px;font-weight:800;color:var(--g1);}
+/* ── CUSTOMERS TAB ── */
+.cust-filter{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;}
+.cust-filter::-webkit-scrollbar{display:none;}
+.cust-card{background:var(--surface);border:1.5px solid var(--bd2);border-radius:var(--r);margin:0 16px 6px;padding:12px 13px;}
+.cc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.cc-av{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;flex-shrink:0;}
+.cc-av-A{background:var(--bluebg);color:var(--blue);}
+.cc-av-B{background:var(--amberbg);color:var(--amber);}
+.cc-av-C{background:var(--g6);color:var(--g2);}
+.cc-av-D{background:var(--purplebg);color:var(--purple);}
+.cc-info{flex:1;}
+.cc-name{font-size:13px;font-weight:700;}
+.cc-meta{font-size:11px;color:var(--ink3);margin-top:1px;}
+.cc-right{text-align:right;}
+.cc-grp-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:4px;}
+.cc-bal{font-size:13px;font-weight:800;color:var(--g1);}
+.cc-bot{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.cc-bot-label{font-size:11px;color:var(--ink3);}
+.grp-sel{padding:6px 10px;border:1.5px solid var(--bd);border-radius:var(--r3);font-size:12px;font-weight:800;
+  font-family:inherit;background:var(--surface2);color:var(--ink);cursor:pointer;outline:none;}
+.cc-save{padding:6px 14px;border:none;border-radius:var(--r3);font-size:12px;font-weight:800;cursor:pointer;
+  background:var(--g1);color:#fff;font-family:inherit;transition:background .15s;}
+.cc-save:hover{background:var(--g2);}
+
+/* export */
+.exp-wrap{padding:16px;}
+.exp-card{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.exp-card-title{font-size:13px;font-weight:800;margin-bottom:12px;}
+.exp-btn{width:100%;padding:14px;border:none;border-radius:var(--r);font-size:14px;font-weight:800;cursor:pointer;
+  font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;margin-bottom:8px;}
+.exp-primary{background:var(--g1);color:#fff;}
+.exp-primary:hover{background:var(--g2);}
+.exp-outline{background:var(--surface);color:var(--g2);border:1.5px solid var(--g4);}
+.exp-outline:hover{background:var(--g6);}
+.exp-note{background:var(--amberbg);border:1px solid var(--amberbd);border-radius:var(--r);padding:12px 14px;font-size:12px;color:#6b3d00;line-height:1.7;}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ==================== LOGIN ==================== -->
+<!-- ════ LOGIN ════ -->
 <div id="s-login" class="screen active">
-  <div class="login-bg">
-    <div class="login-logo">🥬</div>
-    <div class="login-title">GNL Vegetable Trading</div>
-    <div class="login-sub">Pasar Borong Selangor · Seri Kembangan</div>
-    <div class="login-card">
-      <div class="lbl">User ID / Username</div>
-      <input class="inp" id="loginUser" placeholder="e.g. restoran_abc" autocomplete="username">
-      <div class="lbl">Password / Kata Laluan</div>
-      <input class="inp" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password"
-        onkeydown="if(event.key==='Enter')doLogin()">
-      <button class="login-btn" onclick="doLogin()">Log In / 登入</button>
-      <div class="login-err" id="loginErr">❌ ID atau password salah. Cuba lagi.</div>
-    </div>
-    <div class="login-demo">
-      <span>Demo accounts / 示范账号:</span>
-      Customer: restoran_abc / 1234 &nbsp;|&nbsp; Admin: admin / admin123
-    </div>
+<div class="login-bg">
+  <div class="login-logo">🥬</div>
+  <div class="login-title">GNL Vegetable Trading</div>
+  <div class="login-sub">Pasar Borong Selangor · Seri Kembangan</div>
+  <div class="login-card">
+    <div class="fl">Username</div>
+    <input class="fi" id="lu" placeholder="res / cod / admin" autocomplete="username"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="fl">Password</div>
+    <input class="fi" id="lp" type="password" placeholder="••••••"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Log In / 登入</button>
+    <div class="login-err" id="lerr">❌ Username atau password salah.</div>
+  </div>
+  <div class="demo-hint">
+    <b>res / 1234</b> → 客户 (账期 Group C)<br>
+    <b>cod / 5678</b> → 客户 (COD Group B)<br>
+    <b>admin / ad123</b> → 管理后台
   </div>
 </div>
+</div>
 
-<!-- ==================== CUSTOMER HOME ==================== -->
+<!-- ════ HOME ════ -->
 <div id="s-home" class="screen">
   <div class="topbar">
-    <div class="topbar-r1">
-      <div class="brand">
-        <div class="brand-logo-sm">GNL</div>
+    <div class="tb-r1">
+      <div class="tb-brand">
+        <div class="tb-logo">🥬</div>
         <div>
-          <div class="brand-name">GNL Vegetable Trading</div>
-          <div class="brand-user" id="topUserName">Restoran ABC</div>
+          <div class="tb-name">GNL Vegetable Trading</div>
+          <div class="tb-user" id="tbUser">—</div>
         </div>
       </div>
-      <div class="topbar-acts">
-        <button class="icon-btn" onclick="goScreen('s-cart')" title="Cart">
-          🛒<span class="cbadge" id="cartBadge">0</span>
-        </button>
-        <button class="icon-btn" onclick="doLogout()" title="Logout">⬡</button>
+      <div class="tb-acts">
+        <button class="ib" onclick="goS('s-cart')">🛒<span class="cbadge" id="cartBadge" style="display:none">0</span></button>
+        <button class="ib" onclick="doLogout()" style="font-size:14px;">⏻</button>
       </div>
     </div>
-    <div class="search-wrap">
-      <span>🔍</span>
-      <input type="text" placeholder="搜索 / Cari / Search..." id="searchInp" oninput="renderProducts()">
+    <div class="search-box">
+      <span style="opacity:.6">🔍</span>
+      <input type="text" placeholder="搜索 / Cari / Search..." id="srch" oninput="renderProds()">
     </div>
   </div>
-
-  <!-- Language tabs -->
-  <div class="lang-tabs">
-    <button class="lt-btn active" onclick="setLang('zh',this)">中文</button>
-    <button class="lt-btn" onclick="setLang('bm',this)">Bahasa</button>
-    <button class="lt-btn" onclick="setLang('en',this)">English</button>
-    <div class="lt-sep"></div>
-    <span style="font-size:10px;color:var(--t4);padding:0 8px;display:flex;align-items:center;">价格 11PM更新</span>
+  <div class="lang-strip">
+    <button class="ls-btn active" onclick="setLang('zh',this)">中文</button>
+    <button class="ls-btn" onclick="setLang('bm',this)">Bahasa</button>
+    <button class="ls-btn" onclick="setLang('en',this)">English</button>
+    <div class="ls-right">价格请咨询</div>
   </div>
-
-  <!-- Notice -->
-  <div class="notice">⏰ Tutup order: <strong>10:00 PM</strong> &nbsp;·&nbsp; Penghantaran esok pagi</div>
-
-  <!-- Delivery Date Selector -->
+  <div class="notice-bar">⏰ Tutup order: <b>10:00 PM</b> &nbsp;·&nbsp; Hantar esok pagi</div>
+  <div class="surcharge-notice">⚠️ Pesanan &lt; 7kg akan dikenakan tambahan RM 0.50 — Orders under 7kg subject to RM 0.50 surcharge</div>
   <div class="date-bar">
-    <div class="date-bar-label">📦 Pilih Tarikh Penghantaran / 选择送货日期</div>
+    <div class="date-bar-lbl">📦 Tarikh Hantar / 选择送货日期</div>
     <div class="date-chips" id="dateChips"></div>
   </div>
-
-  <!-- Category -->
-  <div class="cat-scroll" id="catScroll">
-    <div class="cat-chip active" onclick="filterCat('all',this)">全部 All</div>
-    <div class="cat-chip" onclick="filterCat('tomato',this)">🍅 番茄</div>
-    <div class="cat-chip" onclick="filterCat('chili',this)">🌶 辣椒</div>
-    <div class="cat-chip" onclick="filterCat('leafy',this)">🥬 叶菜</div>
-    <div class="cat-chip" onclick="filterCat('gourd',this)">🥒 瓜果</div>
-    <div class="cat-chip" onclick="filterCat('root',this)">🥕 根茎</div>
-    <div class="cat-chip" onclick="filterCat('bean',this)">🫘 豆类</div>
-    <div class="cat-chip" onclick="filterCat('herb',this)">🌿 香草</div>
-    <div class="cat-chip" onclick="filterCat('other',this)">🧄 其他</div>
+  <div class="cat-row">
+    <div class="cc active" onclick="setCat('all',this)">全部 All</div>
+    <div class="cc" onclick="setCat('tomato',this)">🍅 番茄</div>
+    <div class="cc" onclick="setCat('chili',this)">🌶 辣椒</div>
+    <div class="cc" onclick="setCat('leafy',this)">🥬 叶菜</div>
+    <div class="cc" onclick="setCat('gourd',this)">🥒 瓜果</div>
+    <div class="cc" onclick="setCat('root',this)">🥕 根茎</div>
+    <div class="cc" onclick="setCat('bean',this)">🫘 豆类</div>
+    <div class="cc" onclick="setCat('herb',this)">🌿 香草</div>
+    <div class="cc" onclick="setCat('other',this)">🧄 其他</div>
   </div>
-
-  <div class="scroll-content" id="prodListWrap"></div>
-
-  <div class="cart-fab" id="cartFab" onclick="goScreen('s-cart')">
-    <div class="cfab-left">
-      <span class="cfab-badge" id="fabCnt">0 品</span>
-      <span class="cfab-lbl">查看购物车</span>
+  <div class="page-body" id="prodWrap" style="padding-bottom:84px;"></div>
+  <div class="cart-fab" id="cartFab" onclick="goS('s-cart')">
+    <div class="fab-l">
+      <span class="fab-badge" id="fabCnt">0</span>
+      <span class="fab-lbl">查看购物车</span>
     </div>
-    <span class="cfab-total" id="fabTotal">RM 0.00</span>
+    <span class="fab-r">→</span>
   </div>
-
-  <div class="bottom-nav">
-    <div class="nav-item active" onclick="goScreen('s-home')"><div class="nav-icon">🏠</div><div>首页</div></div>
-    <div class="nav-item" onclick="goScreen('s-orders')"><div class="nav-icon">📋</div><div>订单</div></div>
-    <div class="nav-item" onclick="goScreen('s-cart')"><div class="nav-icon">🛒</div><div>购物车</div></div>
-    <div class="nav-item" onclick="doLogout()"><div class="nav-icon">👤</div><div>登出</div></div>
+  <div class="bnav">
+    <div class="ni active" onclick="goS('s-home')"><div class="ni-icon">🏠</div><div>首页</div></div>
+    <div class="ni" onclick="goS('s-orders')"><div class="ni-icon">📋</div><div>订单</div></div>
+    <div class="ni" onclick="goS('s-cart')"><div class="ni-icon">🛒</div><div>Cart</div></div>
+    <div class="ni" onclick="doLogout()"><div class="ni-icon">👤</div><div>登出</div></div>
   </div>
 </div>
 
-<!-- ==================== CART ==================== -->
+<!-- ════ CART ════ -->
 <div id="s-cart" class="screen">
-  <div class="sub-header">
-    <button class="back-btn" onclick="goScreen('s-home')">←</button>
+  <div class="sub-hdr">
+    <button class="bk" onclick="goS('s-home')">←</button>
     <h2>购物车 / Cart</h2>
-    <span class="sub-header-right" id="cartHdrCount">0 件</span>
+    <span class="sub-hdr-r" id="cartHdrCnt">0 种</span>
   </div>
-
-  <div class="cart-content" id="cartContent">
-    <div class="cart-delivery-info" id="cartDeliveryInfo">
+  <div class="page-body" style="padding-bottom:210px;">
+    <div class="cart-del-info">
       <div class="cdi-icon">📦</div>
-      <div class="cdi-info">
-        <div class="cdi-label">送货日期 / Tarikh Penghantaran</div>
-        <div class="cdi-val" id="cartDeliveryDate">—</div>
-      </div>
+      <div><div class="cdi-lbl">送货日期 Tarikh Hantar</div><div class="cdi-val" id="cartDelDate">—</div></div>
     </div>
-    <div class="pay-type-row">
-      <span class="pay-badge badge-kredit" id="payBadge">账期</span>
-      <p id="payDesc">账期付款 — 按月结算</p>
+    <div class="pay-strip" id="payStrip">
+      <span class="pay-lbl" id="payBadge">账期</span>
+      <span id="payDesc" style="font-size:12px;color:var(--ink2);">账期付款</span>
     </div>
     <div id="cartItemsWrap"></div>
+    <div class="note-wrap">
+      <div class="note-lbl">备注 / Nota</div>
+      <textarea class="note-ta" id="noteTA" rows="2" placeholder="例：7点前送到，正门收货..."></textarea>
+    </div>
   </div>
-
-  <div class="note-section">
-    <div class="note-label">备注 Nota / Remarks</div>
-    <textarea class="note-ta" id="orderNote" rows="2" placeholder="例：7点前送到，走正门..."></textarea>
-  </div>
-
   <div class="cart-footer">
-    <div class="sum-row"><span class="sum-lbl">商品种类</span><span class="sum-val" id="sumItems">0 种</span></div>
-    <div class="sum-total-row">
-      <span class="sum-total-lbl">订单总额</span>
-      <span class="sum-total-val" id="sumTotal">RM 0.00</span>
+    <div class="cf-row"><span class="cf-lbl">商品种类</span><span class="cf-val" id="cfItems">0 种</span></div>
+    <div class="cf-row"><span class="cf-lbl">总重量</span><span class="cf-val" id="cfWeight">0 kg</span></div>
+    <div id="surchargeRow" style="display:none;" class="surcharge-row">
+      <span class="surcharge-lbl">⚠️ 小订单附加费 (＜7kg)</span>
+      <span class="surcharge-val">+ RM 0.50</span>
     </div>
-    <button class="order-btn" id="placeOrderBtn" onclick="placeOrder()">✅ 确认下单 Hantar Pesanan</button>
+    <div class="cf-total-row">
+      <span class="cf-total-lbl">总计</span>
+      <span class="cf-total-val">待 GNL 确认</span>
+    </div>
+    <button class="order-btn" onclick="placeOrder()">✅ 确认下单 / Hantar Pesanan</button>
+    <div class="small-surcharge-note" id="surchargeNote" style="display:none;">
+      * 本订单总重量不足 7kg，将附加 RM 0.50 小订单费
+    </div>
   </div>
 </div>
 
-<!-- ==================== SUCCESS ==================== -->
+<!-- ════ SUCCESS ════ -->
 <div id="s-success" class="screen">
-  <div class="success-wrap">
-    <div class="success-anim">✅</div>
-    <div class="success-title">订单已提交！</div>
-    <div class="success-sub">GNL Vegetable Trading 将尽快确认。<br>请留意电话通知。</div>
-    <div class="order-ref-box">
-      <div class="order-ref-label">订单号 / No. Pesanan</div>
-      <div class="order-ref-no" id="successRef">#0512-001</div>
-    </div>
-    <button class="home-btn" onclick="goScreen('s-home')">返回首页 / Kembali</button>
+<div class="success-wrap">
+  <div class="succ-icon">✅</div>
+  <div class="succ-title">订单已提交！</div>
+  <div class="succ-sub">GNL Vegetable Trading 将尽快确认您的订单。<br>价格将由我们根据您的客户分组报价。<br>请留意电话通知。</div>
+  <div class="ref-box">
+    <div class="ref-lbl">No. Pesanan / 订单号</div>
+    <div class="ref-no" id="succRef">#0512-001</div>
   </div>
+  <button class="home-btn" onclick="goS('s-home')">返回首页 Kembali</button>
+</div>
 </div>
 
-<!-- ==================== ORDERS ==================== -->
+<!-- ════ ORDERS ════ -->
 <div id="s-orders" class="screen">
-  <div class="orders-hdr">
-    <h2>历史订单 / My Orders</h2>
-    <p id="ordersUserName">Restoran ABC</p>
+  <div style="background:var(--g1);padding:13px 16px;flex-shrink:0;">
+    <h2 style="color:#fff;font-size:15px;font-weight:800;margin-bottom:2px;">历史订单 My Orders</h2>
+    <p id="ordHdrUser" style="color:rgba(255,255,255,.45);font-size:12px;"></p>
   </div>
-
-  <div class="filter-row" id="orderFilter">
-    <div class="filter-chip active" onclick="filterOrders('all',this)">全部</div>
-    <div class="filter-chip" onclick="filterOrders('pending',this)">待确认</div>
-    <div class="filter-chip" onclick="filterOrders('confirmed',this)">已确认</div>
-    <div class="filter-chip" onclick="filterOrders('delivered',this)">已配送</div>
-    <div class="filter-chip" onclick="filterOrders('cancelled',this)">已取消</div>
+  <div class="filter-scroll">
+    <div class="fc active" onclick="filtOrd('all',this)">全部</div>
+    <div class="fc" onclick="filtOrd('pending',this)">待确认</div>
+    <div class="fc" onclick="filtOrd('confirmed',this)">已确认</div>
+    <div class="fc" onclick="filtOrd('delivered',this)">已配送</div>
+    <div class="fc" onclick="filtOrd('cancelled',this)">已取消</div>
   </div>
-
-  <div class="scroll-content" id="ordersListWrap" style="padding-bottom:80px;"></div>
-
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="goScreen('s-home')"><div class="nav-icon">🏠</div><div>首页</div></div>
-    <div class="nav-item active" onclick="goScreen('s-orders')"><div class="nav-icon">📋</div><div>订单</div></div>
-    <div class="nav-item" onclick="goScreen('s-cart')"><div class="nav-icon">🛒</div><div>购物车</div></div>
-    <div class="nav-item" onclick="doLogout()"><div class="nav-icon">👤</div><div>登出</div></div>
+  <div class="page-body" id="ordersWrap" style="padding-bottom:80px;"></div>
+  <div class="bnav">
+    <div class="ni" onclick="goS('s-home')"><div class="ni-icon">🏠</div><div>首页</div></div>
+    <div class="ni active"><div class="ni-icon">📋</div><div>订单</div></div>
+    <div class="ni" onclick="goS('s-cart')"><div class="ni-icon">🛒</div><div>Cart</div></div>
+    <div class="ni" onclick="doLogout()"><div class="ni-icon">👤</div><div>登出</div></div>
   </div>
 </div>
 
-<!-- ==================== ADMIN ==================== -->
+<!-- ════ ADMIN ════ -->
 <div id="s-admin" class="screen">
   <div class="admin-hdr">
-    <div class="admin-hdr-left">
-      <h2>⚙️ Admin Backend</h2>
-      <p>GNL Vegetable Trading · <span id="adminDate"></span></p>
+    <div class="admin-hdr-l">
+      <h2>⚙️ Admin — GNL Vegetable</h2>
+      <p id="adminDateLbl"></p>
     </div>
-    <button class="icon-btn" onclick="doLogout()" style="background:rgba(255,255,255,.15);">🚪</button>
+    <button class="ib" onclick="doLogout()">🚪</button>
   </div>
-
   <div class="admin-tabs">
-    <button class="at-btn active" onclick="adminTab('orders',this)">📋 订单</button>
-    <button class="at-btn" onclick="adminTab('prices',this)">💲 价格</button>
-    <button class="at-btn" onclick="adminTab('customers',this)">🏪 客户</button>
-    <button class="at-btn" onclick="adminTab('export',this)">📤 导出</button>
+    <button class="at active" onclick="aTab('orders',this)">📋 订单</button>
+    <button class="at" onclick="aTab('prices',this)">💲 价格</button>
+    <button class="at" onclick="aTab('customers',this)">🏪 客户</button>
+    <button class="at" onclick="aTab('export',this)">📤 导出</button>
   </div>
 
   <!-- ADMIN: ORDERS -->
-  <div id="ap-orders" class="admin-panel active">
-    <div class="metrics">
-      <div class="metric-card"><div class="mc-v" id="am-orders">28</div><div class="mc-l">今日订单</div></div>
-      <div class="metric-card"><div class="mc-v" style="color:var(--amber)" id="am-pending">5</div><div class="mc-l">待处理</div></div>
+  <div id="ap-orders" class="ap active">
+    <div class="a-metrics">
+      <div class="a-metric"><div class="am-v">28</div><div class="am-l">今日订单</div></div>
+      <div class="a-metric"><div class="am-v" style="color:var(--amber)">5</div><div class="am-l">待处理</div></div>
     </div>
-    <div class="metrics-wide">
-      <div class="metric-wide"><span class="mw-label">今日营业额</span><span class="mw-val" id="am-rev">RM 3,840</span></div>
+    <div class="a-metrics-wide">
+      <div class="amw"><span class="amw-l">今日预计营业额</span><span class="amw-v">RM 4,280</span></div>
     </div>
-
-    <div class="sec-hdr"><h3>今日所有订单</h3></div>
-    <div id="adminOrdersList"></div>
+    <div style="padding:6px 16px;display:flex;align-items:center;gap:8px;">
+      <input type="date" id="adminDateFilter" style="flex:1;padding:8px 10px;border:1.5px solid var(--bd);border-radius:var(--r3);font-size:13px;font-family:inherit;color:var(--ink);background:var(--surface2);outline:none;">
+      <div class="fc active" onclick="resetDate()">今天</div>
+    </div>
+    <div class="a-sec-hdr">所有客户订单 — 点击展开查看 / 编辑</div>
+    <div id="adminOrdersWrap"></div>
   </div>
 
   <!-- ADMIN: PRICES -->
-  <div id="ap-prices" class="admin-panel">
-    <div style="padding:12px 16px 6px;display:flex;justify-content:space-between;align-items:center;">
-      <span style="font-size:13px;color:var(--t2);font-weight:600;">修改价格 · 保存后即时生效</span>
-      <span style="font-size:11px;color:var(--t4);">共 <span id="priceCount">0</span> 种商品</span>
+  <div id="ap-prices" class="ap" style="display:flex;flex-direction:column;">
+    <div style="padding:10px 16px 4px;display:flex;justify-content:space-between;align-items:center;background:var(--surface);border-bottom:1px solid var(--bd2);">
+      <span style="font-size:13px;font-weight:700;color:var(--ink2);">每日价格设置 — 按顾客分组</span>
+      <span style="font-size:11px;color:var(--ink4);" id="priceCnt">0 种商品</span>
     </div>
-    <div id="priceEditorList"></div>
-    <button class="save-prices-btn" onclick="savePrices()">💾 保存全部价格更新</button>
-    <div class="save-toast" id="saveToast">✅ 价格已更新！客户端已同步。</div>
+    <!-- Group selector tabs -->
+    <div class="grp-tabs">
+      <button class="grp-tab active-A" id="gtA" onclick="setPriceGrp('A',this)">A 批发</button>
+      <button class="grp-tab" id="gtB" onclick="setPriceGrp('B',this)">B COD</button>
+      <button class="grp-tab" id="gtC" onclick="setPriceGrp('C',this)">C 账期</button>
+      <button class="grp-tab" id="gtD" onclick="setPriceGrp('D',this)">D 散客</button>
+    </div>
+    <div class="grp-desc grp-desc-A" id="grpDesc">
+      <b>Group A — 批发商 Wholesale:</b> 最低价格，大量采购
+    </div>
+    <div id="priceList" style="overflow-y:auto;flex:1;padding-bottom:60px;"></div>
+    <div class="save-prices-bar">
+      <button class="save-prices-btn" onclick="savePrices()">💾 保存 Group <span id="saveGrpLabel">A</span> 价格</button>
+      <div class="save-toast" id="saveToast">✅ 已保存！</div>
+    </div>
   </div>
 
   <!-- ADMIN: CUSTOMERS -->
-  <div id="ap-customers" class="admin-panel">
-    <div class="sec-hdr"><h3>客户列表 (50 家)</h3></div>
-    <div id="custList"></div>
+  <div id="ap-customers" class="ap">
+    <div style="padding:10px 16px 6px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:13px;font-weight:700;">客户列表</span>
+      <span style="font-size:11px;color:var(--ink4);" id="custCntLbl">0 / 100</span>
+    </div>
+    <div class="cust-filter" id="custFilter">
+      <div class="fc active" onclick="filtCust('all',this)">全部</div>
+      <div class="fc" onclick="filtCust('A',this)">A 批发</div>
+      <div class="fc" onclick="filtCust('B',this)">B COD</div>
+      <div class="fc" onclick="filtCust('C',this)">C 账期</div>
+      <div class="fc" onclick="filtCust('D',this)">D 散客</div>
+    </div>
+    <div id="custWrap"></div>
+    <div style="padding:0 16px 16px;">
+      <button class="exp-btn exp-outline" onclick="alert('实际版本：新增客户账号，分配 Group A/B/C/D，最多支持 100 个账号。')">➕ 新增客户账号</button>
+    </div>
   </div>
 
   <!-- ADMIN: EXPORT -->
-  <div id="ap-export" class="admin-panel">
-    <div style="padding:16px;">
-      <div style="background:var(--white);border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-bottom:12px;">
-        <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px;">📅 选择导出日期范围</div>
-        <div class="lbl">开始日期</div>
-        <input class="inp" type="date" id="exportFrom" style="margin-bottom:10px;">
-        <div class="lbl">结束日期</div>
-        <input class="inp" type="date" id="exportTo">
+  <div id="ap-export" class="ap">
+    <div class="exp-wrap">
+      <div class="exp-card">
+        <div class="exp-card-title">📅 选择导出日期范围</div>
+        <div class="fl">开始日期</div><input class="fi" type="date" id="expFrom" style="margin-bottom:10px;">
+        <div class="fl">结束日期</div><input class="fi" type="date" id="expTo">
       </div>
-      <div class="export-btn-row" style="padding:0;margin-bottom:8px;">
-        <button class="export-btn" onclick="exportExcel()">📊 导出 Excel (.xlsx) — 做账用</button>
-      </div>
-      <div class="export-btn-row" style="padding:0;margin-bottom:8px;">
-        <button class="export-btn export-btn-outline" onclick="exportPDF()">📄 导出 PDF 报告</button>
-      </div>
-      <div style="background:var(--amber-bg);border:1px solid #fcd34d;border-radius:var(--r);padding:12px;font-size:12px;color:#78350f;margin-top:12px;">
-        <strong>导出内容包括：</strong><br>
-        · 每单客户名、订单号、送货日期<br>
-        · 商品明细（品名、数量、单价）<br>
-        · 每单总额 &amp; 付款方式（账期/COD）<br>
-        · 日汇总 &amp; 月汇总
+      <button class="exp-btn exp-primary" onclick="doExport('excel')">📊 导出 Excel (.xlsx) — 做账专用</button>
+      <button class="exp-btn exp-outline" onclick="doExport('pdf')">📄 导出 PDF 报告</button>
+      <div class="exp-note">
+        <b>导出内容：</b><br>
+        · 客户名 · 订单号 · 客户分组 (A/B/C/D) · 送货日期<br>
+        · 商品明细 · 数量 · 协议价格 · 小订单附加费<br>
+        · 每单总额 · 付款方式 (COD/账期)<br>
+        · 日汇总 · 月汇总 · 账期余额报表
       </div>
     </div>
   </div>
 
-  <div class="bottom-nav">
-    <div class="nav-item active"><div class="nav-icon">⚙️</div><div>管理</div></div>
-    <div class="nav-item" onclick="doLogout()"><div class="nav-icon">🚪</div><div>登出</div></div>
+  <div class="bnav">
+    <div class="ni active"><div class="ni-icon">⚙️</div><div>管理</div></div>
+    <div class="ni" onclick="doLogout()"><div class="ni-icon">🚪</div><div>登出</div></div>
   </div>
-</div>
+</div><!-- s-admin -->
 
 </div><!-- .app -->
 
 <script>
-// ==================== DATA ====================
+// ════════════════════════════════════
+// DATA
+// ════════════════════════════════════
+const GRP = {
+  A:{name:'批发商 Wholesale', desc:'Group A — 批发商 Wholesale: 最低价格，大量采购', cls:'A', badge:'lbl-A', payLbl:'批发商'},
+  B:{name:'COD 客户',         desc:'Group B — COD 客户: 货到付款，现金结算',          cls:'B', badge:'lbl-B', payLbl:'COD 现金'},
+  C:{name:'账期客户',         desc:'Group C — 账期客户: 按账期结算 (14–30天)',        cls:'C', badge:'lbl-C', payLbl:'账期'},
+  D:{name:'散客 Walk-in',     desc:'Group D — 散客 Walk-in: 零售价格',               cls:'D', badge:'lbl-D', payLbl:'散客'},
+};
+
 const USERS = {
-  'restoran_abc':  { pass:'1234',  name:'Restoran ABC',   role:'customer', payType:'kredit', payDays:30 },
-  'kedai_makan_b': { pass:'5678',  name:'Kedai Makan B',  role:'customer', payType:'cod',    payDays:0  },
-  'bistro_c':      { pass:'9999',  name:'Bistro C',        role:'customer', payType:'kredit', payDays:14 },
-  'admin':         { pass:'admin123', name:'GNL Admin',    role:'admin'                                   },
+  'res':  {pass:'1234',  name:'Restoran ABC',     role:'customer', grp:'C'},
+  'cod':  {pass:'5678',  name:'Kedai Makan COD',  role:'customer', grp:'B'},
+  'admin':{pass:'ad123', name:'GNL Admin',         role:'admin'},
+  'c04':  {pass:'1234',  name:'Bistro D',          role:'customer', grp:'A'},
+  'c05':  {pass:'1234',  name:'Warung E',           role:'customer', grp:'D'},
 };
 
 const PRODUCTS = [
-  // TOMATO
-  {id:'tm1',emoji:'🍅',bm:'Tomato',zh:'番茄',en:'Tomato',cat:'tomato',unit:'kg',
-    variants:[{lbl:'XL / L',price:3.00},{lbl:'M Size',price:2.60},{lbl:'Grade B',price:2.20}]},
-  {id:'tm2',emoji:'🍅',bm:'Cherry Tomato',zh:'车厘茄',en:'Cherry Tomato',cat:'tomato',unit:'kg',
-    variants:[{lbl:'Standard',price:4.50}]},
-  // CHILI
-  {id:'ch1',emoji:'🫑',bm:'Cili Apple Hijau',zh:'大青力',en:'Capsicum Green',cat:'chili',unit:'kg',
-    variants:[{lbl:'Grade A',price:6.00},{lbl:'M Size',price:4.50}]},
-  {id:'ch2',emoji:'🌶',bm:'Cili Apple Merah',zh:'红大力',en:'Capsicum Red',cat:'chili',unit:'kg',
-    variants:[{lbl:'M Size',price:4.00}]},
-  {id:'ch3',emoji:'🌶',bm:'Cili Apple Kuning',zh:'黄大力',en:'Capsicum Yellow',cat:'chili',unit:'kg',
-    variants:[{lbl:'M Size',price:4.00}]},
-  {id:'ch4',emoji:'🌶',bm:'Cili Hijau A',zh:'青力',en:'Hot Chili Green',cat:'chili',unit:'kg',
-    variants:[{lbl:'Grade A',price:7.00},{lbl:'Grade B',price:4.00}]},
-  {id:'ch5',emoji:'🌶',bm:'Cili Merah A',zh:'红力',en:'Hot Chili Red',cat:'chili',unit:'kg',
-    variants:[{lbl:'Grade A',price:7.50},{lbl:'Grade B',price:4.00}]},
-  {id:'ch6',emoji:'🌶',bm:'Cili Api',zh:'指天椒',en:'Bird Eye Chili',cat:'chili',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'ch7',emoji:'🌶',bm:'Chili Banji',zh:'班吉椒',en:'Chili Banji',cat:'chili',unit:'kg',
-    variants:[{lbl:'Standard',price:7.50}]},
-  // LEAFY
-  {id:'lf1',emoji:'🥬',bm:'Sawi / Sawi Panjang',zh:'菜心',en:'Choy Sum',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:2.80}]},
-  {id:'lf2',emoji:'🥬',bm:'Sawi Jepun',zh:'小白菜',en:'Siew Pak Choy',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:2.80}]},
-  {id:'lf3',emoji:'🥬',bm:'Sawi Putih',zh:'大白菜',en:'White Cabbage',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:3.60}]},
-  {id:'lf4',emoji:'🥬',bm:'Bayam',zh:'苋菜',en:'Spinach',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'lf5',emoji:'🥦',bm:'Kai Lan',zh:'芥兰',en:'Chinese Broccoli',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:6.50}]},
-  {id:'lf6',emoji:'🌿',bm:'Kang Kong',zh:'蕹菜',en:'Water Spinach',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'lf7',emoji:'🥬',bm:'Salad Bulat',zh:'生菜',en:'Iceberg Lettuce',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:7.80}]},
-  {id:'lf8',emoji:'🥬',bm:'Green Coral',zh:'青生菜',en:'Green Coral Lettuce',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:10.00}]},
-  {id:'lf9',emoji:'🥬',bm:'Baby Romaine',zh:'罗马生菜',en:'Baby Romaine',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:7.00}]},
-  {id:'lf10',emoji:'🥦',bm:'Kobis Bunga',zh:'包菜花',en:'Cauliflower',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:9.00}]},
-  {id:'lf11',emoji:'🥦',bm:'Broccoli',zh:'西兰花',en:'Broccoli',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'lf12',emoji:'🌿',bm:'Celery / Daun Sop',zh:'芹菜',en:'Chinese Celery',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:6.80}]},
-  {id:'lf13',emoji:'🌿',bm:'Daun Bawang',zh:'青葱',en:'Spring Onion',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:3.50}]},
-  {id:'lf14',emoji:'🥬',bm:'Kobis Panjang',zh:'黄芽白',en:'Napa Cabbage',cat:'leafy',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  // GOURD
-  {id:'gd1',emoji:'🥒',bm:'Timun Jepun',zh:'日本黄瓜',en:'Japanese Cucumber',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:6.50},{lbl:'Grade B',price:3.50},{lbl:'Mini',price:6.00}]},
-  {id:'gd2',emoji:'🥒',bm:'Timun',zh:'黄瓜',en:'Cucumber',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'gd3',emoji:'🥒',bm:'Petula Ular',zh:'角瓜',en:'Snake Gourd',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'gd4',emoji:'🥒',bm:'Peria',zh:'苦瓜',en:'Bitter Gourd',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'gd5',emoji:'🎃',bm:'Labu Siam',zh:'白蒲',en:'Chayote',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'gd6',emoji:'🎃',bm:'Labu Merah',zh:'金瓜',en:'Pumpkin',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'gd7',emoji:'🫑',bm:'Labu Kundor',zh:'冬瓜',en:'Winter Melon',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'gd8',emoji:'🥒',bm:'Zucchini Hijau',zh:'西葫芦',en:'Zucchini',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:6.00}]},
-  {id:'gd9',emoji:'🌽',bm:'Jagung Muda',zh:'玉米芯',en:'Baby Corn',cat:'gourd',unit:'kg',
-    variants:[{lbl:'Standard',price:4.70}]},
-  // ROOT
-  {id:'rt1',emoji:'🥕',bm:'Carrot',zh:'红萝卜',en:'Carrot',cat:'root',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'rt2',emoji:'🥕',bm:'Lobak Putih',zh:'白萝卜',en:'White Radish',cat:'root',unit:'kg',
-    variants:[{lbl:'Standard',price:3.50},{lbl:'Grade B',price:1.50}]},
-  {id:'rt3',emoji:'🍠',bm:'Ubi Keledek',zh:'地瓜',en:'Sweet Potato',cat:'root',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'rt4',emoji:'🪷',bm:'Lotus Root',zh:'莲藕',en:'Lotus Root',cat:'root',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'rt5',emoji:'🥔',bm:'Seng Kuang',zh:'沙葛',en:'Jicama',cat:'root',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'rt6',emoji:'🫐',bm:'Beet Root',zh:'甜菜根',en:'Beetroot',cat:'root',unit:'kg',
-    variants:[{lbl:'Standard',price:5.80},{lbl:'Grade B',price:3.50}]},
-  // BEAN
-  {id:'bn1',emoji:'🫘',bm:'Kacang Panjang',zh:'豆角',en:'Long Bean',cat:'bean',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'bn2',emoji:'🫘',bm:'Kacang Buncis',zh:'桂豆',en:'French Bean',cat:'bean',unit:'kg',
-    variants:[{lbl:'Standard',price:8.50}]},
-  {id:'bn3',emoji:'🫘',bm:'Kacang Bendi',zh:'羊角豆',en:'Okra',cat:'bean',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'bn4',emoji:'🌱',bm:'Taugeh',zh:'芽菜',en:'Bean Sprout',cat:'bean',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'bn5',emoji:'🫘',bm:'Petai',zh:'臭豆',en:'Stink Bean',cat:'bean',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  // HERB
-  {id:'hb1',emoji:'🫚',bm:'Halia Muda',zh:'子姜',en:'Young Ginger',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'hb2',emoji:'🫚',bm:'Halia Tua',zh:'老姜',en:'Old Ginger',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'hb3',emoji:'🌿',bm:'Lengkuas',zh:'蓝姜',en:'Galangal',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'hb4',emoji:'🟡',bm:'Kunyit',zh:'黄姜',en:'Turmeric',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'hb5',emoji:'🌿',bm:'Serai',zh:'香茅',en:'Lemongrass',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'hb6',emoji:'🌿',bm:'Daun Kari',zh:'咖喱叶',en:'Curry Leaf',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'hb7',emoji:'🌿',bm:'Pudina',zh:'薄荷叶',en:'Mint',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'hb8',emoji:'🍋',bm:'Limau Kasturi',zh:'桔仔',en:'Calamansi',cat:'herb',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  // OTHER
-  {id:'ot1',emoji:'🍆',bm:'Terung Panjang',zh:'长茄',en:'Pearl Brinjal',cat:'other',unit:'kg',
-    variants:[{lbl:'AA Grade',price:5.50},{lbl:'Grade A',price:4.50},{lbl:'Grade B',price:3.00}]},
-  {id:'ot2',emoji:'🧅',bm:'Bawang Merah',zh:'红葱',en:'Red Onion',cat:'other',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'ot3',emoji:'🧄',bm:'Bawang Putih',zh:'蒜头',en:'Garlic',cat:'other',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'ot4',emoji:'🍄',bm:'Cendawan',zh:'鲍鱼菇',en:'Mushroom',cat:'other',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'ot5',emoji:'🫙',bm:'Tau Foo',zh:'豆腐',en:'Tofu',cat:'other',unit:'pcs',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'ot6',emoji:'🫙',bm:'Tau Foo Jepun',zh:'日本豆腐',en:'Japanese Tofu',cat:'other',unit:'pcs',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'ot7',emoji:'🌿',bm:'Rebung Kuning',zh:'黄竹笋',en:'Bamboo Shoot',cat:'other',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
-  {id:'ot8',emoji:'🍍',bm:'Nanas',zh:'黄梨',en:'Pineapple',cat:'other',unit:'kg',
-    variants:[{lbl:'Standard',price:null}]},
+  {id:'tm1',e:'🍅',bm:'Tomato',zh:'番茄',en:'Tomato',cat:'tomato',u:'kg',v:[{l:'XL / L'},{l:'M Size'},{l:'Grade B'}]},
+  {id:'tm2',e:'🍅',bm:'Cherry Tomato',zh:'车厘茄',en:'Cherry Tomato',cat:'tomato',u:'kg',v:[{l:'Standard'}]},
+  {id:'ch1',e:'🫑',bm:'Cili Apple Hijau',zh:'大青力',en:'Capsicum Green',cat:'chili',u:'kg',v:[{l:'Grade A'},{l:'M Size'}]},
+  {id:'ch2',e:'🌶',bm:'Cili Apple Merah',zh:'红大力',en:'Capsicum Red',cat:'chili',u:'kg',v:[{l:'M Size'}]},
+  {id:'ch3',e:'🌶',bm:'Cili Apple Kuning',zh:'黄大力',en:'Capsicum Yellow',cat:'chili',u:'kg',v:[{l:'M Size'}]},
+  {id:'ch4',e:'🌶',bm:'Cili Hijau A',zh:'青力',en:'Hot Chili Green',cat:'chili',u:'kg',v:[{l:'Grade A'},{l:'Grade B'}]},
+  {id:'ch5',e:'🌶',bm:'Cili Merah A',zh:'红力',en:'Hot Chili Red',cat:'chili',u:'kg',v:[{l:'Grade A'},{l:'Grade B'}]},
+  {id:'ch6',e:'🌶',bm:'Cili Api',zh:'指天椒',en:'Bird Eye Chili',cat:'chili',u:'kg',v:[{l:'Standard'}]},
+  {id:'ch7',e:'🌶',bm:'Chili Banji',zh:'班吉椒',en:'Chili Banji',cat:'chili',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf1',e:'🥬',bm:'Sawi / Sawi Panjang',zh:'菜心',en:'Choy Sum',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf2',e:'🥬',bm:'Sawi Jepun',zh:'小白菜',en:'Siew Pak Choy',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf3',e:'🥬',bm:'Sawi Putih',zh:'大白菜',en:'White Cabbage',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf4',e:'🥬',bm:'Bayam',zh:'苋菜',en:'Spinach',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf5',e:'🥦',bm:'Kai Lan',zh:'芥兰',en:'Chinese Broccoli',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf6',e:'🌿',bm:'Kang Kong',zh:'蕹菜',en:'Water Spinach',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf7',e:'🥬',bm:'Salad Bulat',zh:'生菜',en:'Iceberg Lettuce',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf8',e:'🥬',bm:'Green Coral',zh:'青生菜',en:'Green Coral Lettuce',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf9',e:'🥬',bm:'Baby Romaine',zh:'罗马生菜',en:'Baby Romaine',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf10',e:'🥦',bm:'Kobis Bunga',zh:'包菜花',en:'Cauliflower',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf11',e:'🥦',bm:'Broccoli',zh:'西兰花',en:'Broccoli',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf12',e:'🌿',bm:'Celery / Daun Sop',zh:'芹菜',en:'Chinese Celery',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf13',e:'🌿',bm:'Daun Bawang',zh:'青葱',en:'Spring Onion',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf14',e:'🥬',bm:'Kobis Panjang',zh:'黄芽白',en:'Napa Cabbage',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'lf15',e:'🥬',bm:'Kobis Bulat',zh:'包菜',en:'Round Cabbage',cat:'leafy',u:'kg',v:[{l:'Standard'}]},
+  {id:'gd1',e:'🥒',bm:'Timun Jepun',zh:'日本黄瓜',en:'Japanese Cucumber',cat:'gourd',u:'kg',v:[{l:'Standard'},{l:'Grade B'},{l:'Mini'}]},
+  {id:'gd2',e:'🥒',bm:'Timun',zh:'黄瓜',en:'Cucumber',cat:'gourd',u:'kg',v:[{l:'Standard'},{l:'Timun Tua'}]},
+  {id:'gd3',e:'🥒',bm:'Petula Ular',zh:'角瓜',en:'Snake Gourd',cat:'gourd',u:'kg',v:[{l:'Standard'}]},
+  {id:'gd4',e:'🥒',bm:'Peria',zh:'苦瓜',en:'Bitter Gourd',cat:'gourd',u:'kg',v:[{l:'Standard'},{l:'Peria Ketak'}]},
+  {id:'gd5',e:'🎃',bm:'Labu Siam',zh:'白蒲',en:'Chayote',cat:'gourd',u:'kg',v:[{l:'Standard'}]},
+  {id:'gd6',e:'🎃',bm:'Labu Merah',zh:'金瓜',en:'Pumpkin',cat:'gourd',u:'kg',v:[{l:'Standard'}]},
+  {id:'gd7',e:'🫑',bm:'Labu Kundor',zh:'冬瓜',en:'Winter Melon',cat:'gourd',u:'kg',v:[{l:'Standard'}]},
+  {id:'gd8',e:'🥒',bm:'Zucchini Hijau',zh:'西葫芦',en:'Zucchini',cat:'gourd',u:'kg',v:[{l:'Standard'}]},
+  {id:'gd9',e:'🌽',bm:'Jagung Muda',zh:'玉米芯',en:'Baby Corn',cat:'gourd',u:'kg',v:[{l:'Standard'}]},
+  {id:'rt1',e:'🥕',bm:'Carrot',zh:'红萝卜',en:'Carrot',cat:'root',u:'kg',v:[{l:'Standard'}]},
+  {id:'rt2',e:'🥕',bm:'Lobak Putih',zh:'白萝卜',en:'White Radish',cat:'root',u:'kg',v:[{l:'Standard'},{l:'Grade B'}]},
+  {id:'rt3',e:'🍠',bm:'Ubi Keledek',zh:'地瓜',en:'Sweet Potato',cat:'root',u:'kg',v:[{l:'Standard'}]},
+  {id:'rt4',e:'🪷',bm:'Lotus Root',zh:'莲藕',en:'Lotus Root',cat:'root',u:'kg',v:[{l:'Standard'}]},
+  {id:'rt5',e:'🥔',bm:'Seng Kuang',zh:'沙葛',en:'Jicama',cat:'root',u:'kg',v:[{l:'Standard'}]},
+  {id:'rt6',e:'🫐',bm:'Beet Root',zh:'甜菜根',en:'Beetroot',cat:'root',u:'kg',v:[{l:'Standard'},{l:'Grade B'}]},
+  {id:'bn1',e:'🫘',bm:'Kacang Panjang',zh:'豆角',en:'Long Bean',cat:'bean',u:'kg',v:[{l:'Standard'}]},
+  {id:'bn2',e:'🫘',bm:'Kacang Buncis',zh:'桂豆',en:'French Bean',cat:'bean',u:'kg',v:[{l:'Standard'}]},
+  {id:'bn3',e:'🫘',bm:'Kacang Bendi',zh:'羊角豆',en:'Okra',cat:'bean',u:'kg',v:[{l:'Standard'}]},
+  {id:'bn4',e:'🌱',bm:'Taugeh',zh:'芽菜',en:'Bean Sprout',cat:'bean',u:'kg',v:[{l:'Standard'}]},
+  {id:'bn5',e:'🫘',bm:'Petai',zh:'臭豆',en:'Stink Bean',cat:'bean',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb1',e:'🫚',bm:'Halia Muda',zh:'子姜',en:'Young Ginger',cat:'herb',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb2',e:'🫚',bm:'Halia Tua',zh:'老姜',en:'Old Ginger',cat:'herb',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb3',e:'🌿',bm:'Lengkuas',zh:'蓝姜',en:'Galangal',cat:'herb',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb4',e:'🌿',bm:'Kunyit',zh:'黄姜',en:'Turmeric',cat:'herb',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb5',e:'🌿',bm:'Serai',zh:'香茅',en:'Lemongrass',cat:'herb',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb6',e:'🌿',bm:'Daun Kari',zh:'咖喱叶',en:'Curry Leaf',cat:'herb',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb7',e:'🌿',bm:'Pudina',zh:'薄荷叶',en:'Mint',cat:'herb',u:'kg',v:[{l:'Standard'}]},
+  {id:'hb8',e:'🍋',bm:'Limau Kasturi',zh:'桔仔',en:'Calamansi',cat:'herb',u:'kg',v:[{l:'Standard'},{l:'Limau Nipis'}]},
+  {id:'ot1',e:'🍆',bm:'Terung Panjang',zh:'长茄',en:'Pearl Brinjal',cat:'other',u:'kg',v:[{l:'AA Grade'},{l:'Grade A'},{l:'Grade B'}]},
+  {id:'ot2',e:'🍆',bm:'Terung Bulat',zh:'圆茄',en:'Round Brinjal',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot3',e:'🧅',bm:'Bawang Merah',zh:'红葱',en:'Red Onion',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot4',e:'🧄',bm:'Bawang Putih',zh:'蒜头',en:'Garlic',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot5',e:'🍄',bm:'Cendawan',zh:'鲍鱼菇',en:'Mushroom',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot6',e:'🫙',bm:'Tau Foo',zh:'豆腐',en:'Tofu',cat:'other',u:'pcs',v:[{l:'Standard'},{l:'Tau Pok'},{l:'Tau Foo Jepun'}]},
+  {id:'ot7',e:'🌿',bm:'Rebung Kuning',zh:'黄竹笋',en:'Bamboo Shoot',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot8',e:'🍍',bm:'Nanas',zh:'黄梨',en:'Pineapple',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot9',e:'🌽',bm:'Jagung Putih',zh:'白玉米',en:'White Corn',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot10',e:'🌿',bm:'Sayur Asam',zh:'亚三叶',en:'Sayur Asam',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot11',e:'🌿',bm:'Sayur Raja',zh:'帝皇苗',en:'Sayur Raja',cat:'other',u:'kg',v:[{l:'Standard'}]},
+  {id:'ot12',e:'🫘',bm:'Kacang Botol',zh:'四角豆',en:'Winged Bean',cat:'bean',u:'kg',v:[{l:'Standard'}]},
 ];
 
-const CAT_LABELS = {
+const CAT_LABELS={
   tomato:{zh:'🍅 番茄',bm:'🍅 Tomato',en:'🍅 Tomato'},
   chili:{zh:'🌶 辣椒',bm:'🌶 Cili',en:'🌶 Chili'},
   leafy:{zh:'🥬 叶菜',bm:'🥬 Sayuran Hijau',en:'🥬 Leafy Greens'},
   gourd:{zh:'🥒 瓜果',bm:'🥒 Labu & Timun',en:'🥒 Gourds'},
-  root:{zh:'🥕 根茎',bm:'🥕 Ubi & Lobak',en:'🥕 Root Vegetables'},
+  root:{zh:'🥕 根茎',bm:'🥕 Ubi & Lobak',en:'🥕 Root Veg'},
   bean:{zh:'🫘 豆类',bm:'🫘 Kacang',en:'🫘 Beans'},
-  herb:{zh:'🌿 香草',bm:'🌿 Herba & Rempah',en:'🌿 Herbs & Spices'},
+  herb:{zh:'🌿 香草',bm:'🌿 Herba',en:'🌿 Herbs'},
   other:{zh:'🧄 其他',bm:'🧄 Lain-lain',en:'🧄 Others'},
 };
 
-const SAMPLE_ORDERS = [
-  {id:'#0512-001',date:'2025-05-12 08:30',delivery:'2025-05-13',status:'pending',
-   items:'番茄大 10kg · 小白菜 5kg · 菜心 8kg',total:118.50,payType:'kredit'},
-  {id:'#0511-003',date:'2025-05-11 07:15',delivery:'2025-05-12',status:'delivered',
-   items:'芥兰 5kg · 青葱 10kg · 芹菜 6kg · 包菜 15kg',total:203.00,payType:'kredit'},
-  {id:'#0510-002',date:'2025-05-10 09:00',delivery:'2025-05-11',status:'delivered',
-   items:'Tomato XL 20kg · 珍珠茄 AA 8kg · 白萝卜 12kg',total:156.00,payType:'cod'},
-  {id:'#0508-001',date:'2025-05-08 10:20',delivery:'2025-05-09',status:'delivered',
-   items:'日本黄瓜 10kg · 西兰花 5kg · 生菜 8kg',total:142.50,payType:'kredit'},
-  {id:'#0505-002',date:'2025-05-05 08:00',delivery:'2025-05-06',status:'cancelled',
-   items:'苦瓜 5kg · 豆角 10kg',total:45.00,payType:'cod'},
+// prices[grp][prodId_varIdx] = price
+const prices={A:{},B:{},C:{},D:{}};
+PRODUCTS.forEach(p=>p.v.forEach((_,i)=>{
+  ['A','B','C','D'].forEach(g=>{ prices[g][p.id+'_'+i]=null; });
+}));
+
+// Admin orders data with full item lists
+const ADMIN_ORDERS=[
+  {shop:'Restoran ABC',no:'#0512-001',del:'2025-05-13',grp:'C',pay:'kredit',status:'pending',surcharge:false,
+   items:[
+     {pid:'lf1',vi:0,name:'菜心 Sawi',variant:'Standard',qty:10,unit:'kg'},
+     {pid:'lf2',vi:0,name:'小白菜 Sawi Jepun',variant:'Standard',qty:5,unit:'kg'},
+     {pid:'tm1',vi:0,name:'番茄 Tomato',variant:'XL / L',qty:8,unit:'kg'},
+     {pid:'lf5',vi:0,name:'芥兰 Kai Lan',variant:'Standard',qty:4,unit:'kg'},
+     {pid:'lf12',vi:0,name:'芹菜 Celery',variant:'Standard',qty:6,unit:'kg'},
+   ]},
+  {shop:'Kedai Makan COD',no:'#0512-002',del:'2025-05-13',grp:'B',pay:'cod',status:'confirmed',surcharge:false,
+   items:[
+     {pid:'lf5',vi:0,name:'芥兰 Kai Lan',variant:'Standard',qty:8,unit:'kg'},
+     {pid:'lf13',vi:0,name:'青葱 Daun Bawang',variant:'Standard',qty:12,unit:'kg'},
+     {pid:'ch1',vi:0,name:'大青力 Cili Apple Hijau',variant:'Grade A',qty:5,unit:'kg'},
+     {pid:'gd1',vi:0,name:'日本黄瓜 Timun Jepun',variant:'Standard',qty:6,unit:'kg'},
+   ]},
+  {shop:'Bistro D',no:'#0512-003',del:'2025-05-14',grp:'A',pay:'kredit',status:'pending',surcharge:false,
+   items:[
+     {pid:'gd1',vi:0,name:'日本黄瓜 Timun Jepun',variant:'Standard',qty:15,unit:'kg'},
+     {pid:'lf7',vi:0,name:'生菜 Salad Bulat',variant:'Standard',qty:8,unit:'kg'},
+     {pid:'rt2',vi:0,name:'白萝卜 Lobak Putih',variant:'Standard',qty:10,unit:'kg'},
+     {pid:'ch2',vi:0,name:'红大力 Cili Apple Merah',variant:'M Size',qty:5,unit:'kg'},
+   ]},
+  {shop:'Warung E (散客)',no:'#0512-004',del:'2025-05-13',grp:'D',pay:'cod',status:'pending',surcharge:true,
+   items:[
+     {pid:'tm2',vi:0,name:'车厘茄 Cherry Tomato',variant:'Standard',qty:2,unit:'kg'},
+     {pid:'lf8',vi:0,name:'青生菜 Green Coral',variant:'Standard',qty:3,unit:'kg'},
+   ]},
+  {shop:'Restoran ABC',no:'#0512-005',del:'2025-05-15',grp:'C',pay:'kredit',status:'confirmed',surcharge:false,
+   items:[
+     {pid:'lf1',vi:0,name:'菜心 Sawi',variant:'Standard',qty:20,unit:'kg'},
+     {pid:'ot3',vi:0,name:'红葱 Bawang Merah',variant:'Standard',qty:5,unit:'kg'},
+     {pid:'ot4',vi:0,name:'蒜头 Bawang Putih',variant:'Standard',qty:5,unit:'kg'},
+     {pid:'lf3',vi:0,name:'大白菜 Sawi Putih',variant:'Standard',qty:10,unit:'kg'},
+   ]},
 ];
 
-const ADMIN_ORDERS = [
-  {shop:'Restoran ABC',  no:'#0512-001',delivery:'2025-05-13',items:'番茄 10kg · 小白菜 5kg · 菜心 8kg',total:118.50,status:'pending'},
-  {shop:'Kedai Makan B', no:'#0512-002',delivery:'2025-05-13',items:'芥兰 8kg · 青葱 12kg · 红大力 5kg',total:198.00,status:'confirmed'},
-  {shop:'Bistro C',      no:'#0512-003',delivery:'2025-05-14',items:'日本黄瓜 10kg · 生菜 6kg · 白萝卜 8kg',total:176.00,status:'pending'},
-  {shop:'Restoran D',    no:'#0512-004',delivery:'2025-05-13',items:'小白菜 20kg · 番茄M 15kg · 芹菜 10kg',total:246.00,status:'confirmed'},
-  {shop:'Kedai E',       no:'#0512-005',delivery:'2025-05-15',items:'Cherry Tomato 5kg · 甜菜根 8kg',total:69.00,status:'pending'},
+const CUSTOMERS_LIST=[
+  {id:'res', name:'Restoran ABC',       meta:'Seri Kembangan · 012-3456789', grp:'C', bal:'RM 340'},
+  {id:'cod', name:'Kedai Makan COD',    meta:'Puchong · 016-7891234',        grp:'B', bal:'RM 0'},
+  {id:'c04', name:'Bistro D',           meta:'Subang · 011-2233445',         grp:'A', bal:'RM 890'},
+  {id:'c05', name:'Warung E',           meta:'Kajang · 017-4567890',         grp:'D', bal:'RM 0'},
+  {id:'c06', name:'Restaurant F',       meta:'Cheras · 019-6789012',         grp:'C', bal:'RM 560'},
+  {id:'c07', name:'Kedai G',            meta:'Ampang · 013-9012345',         grp:'A', bal:'RM 1,200'},
+  {id:'c08', name:'Nasi Kandar H',      meta:'Klang · 012-8765432',          grp:'B', bal:'RM 0'},
+  {id:'c09', name:'Kopitiam I',         meta:'Shah Alam · 011-5544332',      grp:'C', bal:'RM 220'},
+  {id:'c10', name:'Walk-in J',          meta:'Walk-in customer',             grp:'D', bal:'RM 0'},
 ];
 
-const CUSTOMERS = [
-  {name:'Restoran ABC',  meta:'Seri Kembangan · Tel:012-345xxxx',type:'kredit',balance:'RM 340'},
-  {name:'Kedai Makan B', meta:'Puchong · Tel:016-789xxxx',        type:'cod',   balance:'RM 0'},
-  {name:'Bistro C',      meta:'Subang · Tel:011-223xxxx',         type:'kredit',balance:'RM 890'},
-  {name:'Restoran D',    meta:'Kajang · Tel:017-456xxxx',         type:'kredit',balance:'RM 120'},
-  {name:'Kedai E',       meta:'Cheras · Tel:019-678xxxx',         type:'cod',   balance:'RM 0'},
-  {name:'Warung F',      meta:'Ampang · Tel:013-901xxxx',         type:'kredit',balance:'RM 560'},
+const SAMPLE_ORDERS=[
+  {id:'#0512-001',date:'2025-05-12 08:30',del:'2025-05-13',status:'pending',surcharge:false,
+   items:[{name:'菜心',variant:'Standard',qty:10,u:'kg'},{name:'小白菜',variant:'Standard',qty:5,u:'kg'},{name:'番茄 XL',variant:'XL/L',qty:8,u:'kg'},{name:'芥兰',variant:'Standard',qty:4,u:'kg'},{name:'芹菜',variant:'Standard',qty:6,u:'kg'}],pay:'C'},
+  {id:'#0511-003',date:'2025-05-11 07:15',del:'2025-05-12',status:'delivered',surcharge:false,
+   items:[{name:'日本黄瓜',variant:'Standard',qty:10,u:'kg'},{name:'青葱',variant:'Standard',qty:12,u:'kg'},{name:'芹菜',variant:'Standard',qty:6,u:'kg'},{name:'包菜',variant:'Standard',qty:15,u:'kg'}],pay:'C'},
+  {id:'#0510-002',date:'2025-05-10 09:00',del:'2025-05-11',status:'delivered',surcharge:false,
+   items:[{name:'大青力A',variant:'Grade A',qty:5,u:'kg'},{name:'白萝卜',variant:'Standard',qty:10,u:'kg'},{name:'长茄AA',variant:'AA Grade',qty:8,u:'kg'}],pay:'C'},
+  {id:'#0508-001',date:'2025-05-08 10:20',del:'2025-05-09',status:'delivered',surcharge:false,
+   items:[{name:'生菜',variant:'Standard',qty:8,u:'kg'},{name:'西兰花',variant:'Standard',qty:5,u:'kg'}],pay:'C'},
+  {id:'#0505-002',date:'2025-05-05 08:00',del:'2025-05-06',status:'cancelled',surcharge:true,
+   items:[{name:'苦瓜',variant:'Standard',qty:3,u:'kg'},{name:'豆角',variant:'Standard',qty:3,u:'kg'}],pay:'C'},
 ];
 
-// ==================== STATE ====================
-let currentUser = null;
-let currentLang = 'zh';
-let currentCat = 'all';
-let selectedDate = null;
-let cart = {}; // { prodId_varIdx: { prod, variantIdx, qty } }
-let orderCounter = 10;
-let prices = {}; // live price store
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let CU=null,lang='zh',cat='all',selDate=null,cart={},ordFilter='all',custFilter='all',priceGrp='A',oc=100;
 
-// Init prices from PRODUCTS
-PRODUCTS.forEach(p => {
-  p.variants.forEach((v,i) => { prices[p.id+'_'+i] = v.price; });
-});
+const GRP_BADGE_COLORS={A:'background:var(--bluebg);color:var(--blue)',B:'background:var(--amberbg);color:var(--amber)',C:'background:var(--g6);color:var(--g2)',D:'background:var(--purplebg);color:var(--purple)'};
 
-// ==================== LOGIN ====================
+// ════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════
 function doLogin(){
-  const u = document.getElementById('loginUser').value.trim().toLowerCase();
-  const p = document.getElementById('loginPass').value;
-  const err = document.getElementById('loginErr');
-  if(USERS[u] && USERS[u].pass === p){
-    currentUser = {...USERS[u], id: u};
+  const u=document.getElementById('lu').value.trim().toLowerCase();
+  const p=document.getElementById('lp').value;
+  const err=document.getElementById('lerr');
+  if(USERS[u]&&USERS[u].pass===p){
+    CU={...USERS[u],id:u};
     err.style.display='none';
-    if(currentUser.role==='admin'){
-      goScreen('s-admin');
-      document.getElementById('adminDate').textContent = fmtDate(new Date());
-      renderAdminOrders(); renderPriceEditor(); renderCustomers();
+    if(CU.role==='admin'){
+      document.getElementById('adminDateLbl').textContent=fmtNow();
+      const today=new Date(),fmt=d=>d.toISOString().split('T')[0];
+      document.getElementById('expFrom').value=fmt(new Date(today.getFullYear(),today.getMonth(),1));
+      document.getElementById('expTo').value=fmt(today);
+      document.getElementById('adminDateFilter').value=fmt(today);
+      renderAdminOrders(); renderPriceList(); renderCustList();
+      goS('s-admin');
     } else {
-      document.getElementById('topUserName').textContent = currentUser.name;
-      document.getElementById('ordersUserName').textContent = currentUser.name;
-      document.getElementById('payBadge').className = 'pay-badge '+(currentUser.payType==='cod'?'badge-cod':'badge-kredit');
-      document.getElementById('payDesc').textContent = currentUser.payType==='cod'?'Cash on Delivery — 货到付款':'账期付款 — 按 '+currentUser.payDays+' 天结算';
-      goScreen('s-home');
-      buildDateChips();
-      renderProducts();
+      document.getElementById('tbUser').textContent=CU.name+' · Group '+CU.grp;
+      document.getElementById('ordHdrUser').textContent=CU.name;
+      const g=GRP[CU.grp];
+      const strip=document.getElementById('payStrip');
+      strip.style.background=CU.grp==='A'?'var(--bluebg)':CU.grp==='B'?'var(--amberbg)':CU.grp==='C'?'var(--g6)':'var(--purplebg)';
+      strip.style.border='1px solid '+(CU.grp==='A'?'#b8ccff':CU.grp==='B'?'var(--amberbd)':CU.grp==='C'?'var(--g5)':'#c4b5fd)');
+      document.getElementById('payBadge').textContent='Group '+CU.grp+' · '+g.payLbl;
+      document.getElementById('payBadge').className='pay-lbl lbl-'+CU.grp;
+      document.getElementById('payDesc').textContent=g.name;
+      buildDates(); renderProds(); goS('s-home');
     }
-  } else {
-    err.style.display='block';
-  }
+  } else { err.style.display='block'; }
 }
-function doLogout(){
-  currentUser=null; cart={};
-  document.getElementById('loginUser').value='';
-  document.getElementById('loginPass').value='';
-  goScreen('s-login');
-}
+function doLogout(){CU=null;cart={};document.getElementById('lu').value='';document.getElementById('lp').value='';goS('s-login');}
 
-// ==================== DATE CHIPS ====================
-function buildDateChips(){
-  const container = document.getElementById('dateChips');
-  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const today = new Date();
-  let html='';
+// ════════════════════════════════════
+// DATES
+// ════════════════════════════════════
+function buildDates(){
+  const dN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const mN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const today=new Date(); let html='';
   for(let i=1;i<=7;i++){
-    const d = new Date(today); d.setDate(today.getDate()+i);
-    const isSun = d.getDay()===0;
-    html+=`<div class="date-chip${i===1?' active':''}${isSun?' disabled':''}" onclick="selectDate(this,'${d.toISOString().split('T')[0]}')">
-      <div class="dc-day">${days[d.getDay()]}</div>
-      <div class="dc-date">${d.getDate()}</div>
-      <div class="dc-month">${months[d.getMonth()]}</div>
+    const d=new Date(today); d.setDate(today.getDate()+i);
+    const ds=d.toISOString().split('T')[0];
+    const dis=d.getDay()===0;
+    html+=`<div class="dchip${i===1?' active':''}${dis?' dis':''}" onclick="pickDate(this,'${ds}')">
+      <div class="dd">${dN[d.getDay()]}</div><div class="dn">${d.getDate()}</div><div class="dm">${mN[d.getMonth()]}</div>
     </div>`;
   }
-  container.innerHTML=html;
-  // auto-select first
-  const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
-  selectedDate = tomorrow.toISOString().split('T')[0];
-  updateCartDeliveryDate();
+  document.getElementById('dateChips').innerHTML=html;
+  const t=new Date(today); t.setDate(today.getDate()+1);
+  selDate=t.toISOString().split('T')[0]; syncDel();
 }
-function selectDate(el, dateStr){
-  document.querySelectorAll('.date-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  selectedDate=dateStr;
-  updateCartDeliveryDate();
+function pickDate(el,ds){
+  document.querySelectorAll('.dchip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); selDate=ds; syncDel();
 }
-function updateCartDeliveryDate(){
-  const d = document.getElementById('cartDeliveryDate');
-  if(d) d.textContent = selectedDate ? fmtDateStr(selectedDate) : '—';
+function syncDel(){
+  const el=document.getElementById('cartDelDate');
+  if(el) el.textContent=selDate?fmtDS(selDate):'—';
 }
-function fmtDateStr(s){
+function fmtDS(s){
   const d=new Date(s+'T00:00:00');
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return days[d.getDay()]+', '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+  return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()]+', '+d.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getFullYear();
 }
-function fmtDate(d){
-  return d.toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
-}
+function fmtNow(){return new Date().toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short',year:'numeric'});}
 
-// ==================== LANGUAGE ====================
-function setLang(lang, btn){
-  currentLang=lang;
-  document.querySelectorAll('.lt-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderProducts();
-}
-function getName(p){
-  return currentLang==='zh'?p.zh : currentLang==='bm'?p.bm : p.en;
-}
-function getSubNames(p){
-  if(currentLang==='zh') return p.bm;
-  if(currentLang==='bm') return p.zh;
-  return p.zh+' / '+p.bm;
-}
+// ════════════════════════════════════
+// LANG
+// ════════════════════════════════════
+function setLang(l,btn){lang=l;document.querySelectorAll('.ls-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProds();}
+function gN(p){return lang==='zh'?p.zh:lang==='bm'?p.bm:p.en;}
+function gS(p){return lang==='zh'?p.bm:lang==='bm'?p.zh:p.zh+' / '+p.bm;}
 
-// ==================== PRODUCTS ====================
-function filterCat(cat, el){
-  currentCat=cat;
-  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderProducts();
-}
-function renderProducts(){
-  const q = document.getElementById('searchInp').value.toLowerCase();
-  const wrap = document.getElementById('prodListWrap');
-  const cats = ['tomato','chili','leafy','gourd','root','bean','herb','other'];
+// ════════════════════════════════════
+// PRODUCTS (no price shown)
+// ════════════════════════════════════
+function setCat(c,el){cat=c;document.querySelectorAll('.cc').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderProds();}
+function renderProds(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  const cats=['tomato','chili','leafy','gourd','root','bean','herb','other'];
   let html='';
-  for(const cat of cats){
-    if(currentCat!=='all' && currentCat!==cat) continue;
-    let items = PRODUCTS.filter(p=>p.cat===cat);
+  for(const c of cats){
+    if(cat!=='all'&&cat!==c) continue;
+    let items=PRODUCTS.filter(p=>p.cat===c);
     if(q) items=items.filter(p=>p.zh.includes(q)||p.bm.toLowerCase().includes(q)||p.en.toLowerCase().includes(q));
     if(!items.length) continue;
-    const lbl = CAT_LABELS[cat][currentLang]||CAT_LABELS[cat].en;
-    html+=`<div class="sec-hdr"><h3>${lbl}</h3><span class="sec-count">${items.length}</span></div>`;
-    html+='<div class="prod-list">';
+    const cl=CAT_LABELS[c][lang]||CAT_LABELS[c].en;
+    html+=`<div class="sec-hdr"><h3>${cl}</h3><span class="sec-cnt">${items.length}</span></div><div class="prod-list">`;
     for(const p of items){
-      const hasCart = p.variants.some((_,i)=>cart[p.id+'_'+i]);
-      html+=`<div class="prod-card${hasCart?' has-item':''}" id="pc-${p.id}">
-        <div class="prod-emoji">${p.emoji}</div>
-        <div class="prod-info">
-          <div class="prod-main-name">${getName(p)}</div>
-          <div class="prod-sub-names"><span class="prod-sub-nm">${getSubNames(p)}</span></div>
-          <div class="prod-variants">`;
-      p.variants.forEach((v,i)=>{
-        const key=p.id+'_'+i;
-        const livePrice = prices[key];
-        const qty = cart[key]?cart[key].qty:0;
-        const priceStr = livePrice!==null&&livePrice!==undefined ? 'RM '+livePrice.toFixed(2)+'/'+p.unit : 'TBD';
-        html+=`<div class="variant-row">
-          <span class="vr-label">${v.lbl}</span>
-          <span class="vr-price${livePrice===null||livePrice===undefined?' tbd':''}">${priceStr}</span>
-          <div class="qty-stepper">
-            <button class="qs-btn" onclick="changeQty('${key}','${p.id}',${i},-1)" ${qty===0?'disabled':''}>−</button>
-            <input class="qs-input" type="number" min="0" step="0.5" value="${qty||''}" placeholder="0"
-              onchange="setQtyDirect('${key}','${p.id}',${i},this.value)"
-              onfocus="this.select()">
-            <span class="qs-unit">${p.unit}</span>
-            <button class="qs-btn" onclick="changeQty('${key}','${p.id}',${i},1)">+</button>
+      const hasCart=p.v.some((_,i)=>cart[p.id+'_'+i]);
+      html+=`<div class="pcard${hasCart?' in-cart':''}" id="pc-${p.id}">
+        <div class="pc-emoji">${p.e}</div>
+        <div class="pc-info">
+          <div class="pc-main">${gN(p)}</div>
+          <div class="pc-subs"><span class="pc-sub">${gS(p)}</span></div>
+          <div class="pc-variants">`;
+      p.v.forEach((v,i)=>{
+        const key=p.id+'_'+i,qty=cart[key]?cart[key].qty:0;
+        html+=`<div class="vrow">
+          <span class="vrow-lbl">${v.l}</span>
+          <div class="qstep">
+            <button class="qb" onclick="cq('${key}','${p.id}',${i},-1)" ${qty===0?'disabled':''}>−</button>
+            <input class="qi" type="number" min="0" step="0.5" value="${qty||''}" placeholder="0"
+              onchange="sq('${key}','${p.id}',${i},this.value)" onfocus="this.select()">
+            <span class="qu">${p.u}</span>
+            <button class="qb" onclick="cq('${key}','${p.id}',${i},1)">+</button>
           </div>
         </div>`;
       });
-      html+=`</div></div></div>`;
+      html+='</div></div></div>';
     }
     html+='</div>';
   }
-  if(!html) html='<div style="text-align:center;padding:48px 20px;color:var(--t4);font-size:14px;">没有找到相关商品</div>';
-  wrap.innerHTML=html;
+  if(!html) html='<div style="text-align:center;padding:56px 24px;color:var(--ink4);">🔍 没有找到商品</div>';
+  document.getElementById('prodWrap').innerHTML=html;
 }
 
-// ==================== CART LOGIC ====================
-function changeQty(key,pid,vi,delta){
-  const p=PRODUCTS.find(x=>x.id===pid);
-  const cur=cart[key]?cart[key].qty:0;
-  const nw=Math.max(0,cur+delta);
-  if(nw===0){delete cart[key];}
-  else{cart[key]={prod:p,variantIdx:vi,qty:nw};}
-  refreshCartUI(); renderProducts();
+// ════════════════════════════════════
+// CART
+// ════════════════════════════════════
+function cq(key,pid,vi,delta){
+  const p=PRODUCTS.find(x=>x.id===pid),cur=cart[key]?cart[key].qty:0,nw=Math.max(0,+(cur+delta).toFixed(1));
+  nw===0?delete cart[key]:cart[key]={p,vi,qty:nw};
+  refreshCart(); renderProds();
 }
-function setQtyDirect(key,pid,vi,val){
-  const p=PRODUCTS.find(x=>x.id===pid);
-  const nw=parseFloat(val)||0;
-  if(nw<=0){delete cart[key];}
-  else{cart[key]={prod:p,variantIdx:vi,qty:nw};}
-  refreshCartUI(); renderProducts();
+function sq(key,pid,vi,val){
+  const p=PRODUCTS.find(x=>x.id===pid),nw=Math.max(0,parseFloat(val)||0);
+  nw===0?delete cart[key]:cart[key]={p,vi,qty:nw};
+  refreshCart(); renderProds();
 }
-function refreshCartUI(){
-  const items=Object.entries(cart);
-  const totalQtyItems=items.length;
-  const totalAmt=items.reduce((s,[k,it])=>{
-    const lp=prices[k]; return s+(lp||0)*it.qty;
-  },0);
+function refreshCart(){
+  const its=Object.entries(cart);
+  const cnt=its.length;
+  const totalKg=its.reduce((s,[,it])=>s+(it.p.u==='kg'?it.qty:0),0);
+  const hasSurcharge=totalKg>0&&totalKg<7;
   // badge
-  const badge=document.getElementById('cartBadge');
-  badge.textContent=totalQtyItems; badge.style.display=totalQtyItems>0?'flex':'none';
+  const b=document.getElementById('cartBadge');
+  b.textContent=cnt; b.style.display=cnt?'flex':'none';
   // fab
-  const fab=document.getElementById('cartFab');
-  fab.classList.toggle('visible',totalQtyItems>0);
-  document.getElementById('fabCnt').textContent=totalQtyItems+' 种';
-  document.getElementById('fabTotal').textContent='RM '+totalAmt.toFixed(2);
+  document.getElementById('cartFab').classList.toggle('show',cnt>0);
+  document.getElementById('fabCnt').textContent=cnt+' 种';
   // cart screen
-  document.getElementById('cartHdrCount').textContent=totalQtyItems+' 种';
-  document.getElementById('sumItems').textContent=totalQtyItems+' 种';
-  document.getElementById('sumTotal').textContent='RM '+totalAmt.toFixed(2);
+  document.getElementById('cartHdrCnt').textContent=cnt+' 种';
+  document.getElementById('cfItems').textContent=cnt+' 种';
+  document.getElementById('cfWeight').textContent=totalKg.toFixed(1)+' kg';
+  document.getElementById('surchargeRow').style.display=hasSurcharge?'flex':'none';
+  document.getElementById('surchargeNote').style.display=hasSurcharge?'block':'none';
   renderCartItems();
 }
 function renderCartItems(){
   const wrap=document.getElementById('cartItemsWrap');
-  const items=Object.entries(cart);
-  if(!items.length){
-    wrap.innerHTML='<div class="empty-cart"><div class="ec-icon">🛒</div><p>购物车是空的<br>请返回首页选购</p></div>';
-    return;
-  }
-  let html='';
-  for(const [key,it] of items){
-    const p=it.prod; const vi=it.variantIdx;
-    const v=p.variants[vi]; const lp=prices[key];
-    const amt=(lp||0)*it.qty;
-    html+=`<div class="cart-item-card">
+  const its=Object.entries(cart);
+  if(!its.length){wrap.innerHTML='<div style="text-align:center;padding:48px 24px;color:var(--ink4)"><div style="font-size:48px;margin-bottom:12px">🛒</div><p style="font-size:14px">购物车是空的</p></div>';return;}
+  wrap.innerHTML=its.map(([key,it])=>{
+    const p=it.p,v=p.v[it.vi];
+    return `<div class="ci-card">
       <div class="ci-top">
-        <span class="ci-emoji">${p.emoji}</span>
-        <div class="ci-info">
-          <div class="ci-name">${p.zh} · ${p.bm}</div>
-          <div class="ci-variant">${v.lbl} · ${lp!==null&&lp!==undefined?'RM '+lp.toFixed(2)+'/'+p.unit:'TBD'}</div>
-        </div>
-        <button class="ci-remove" onclick="removeFromCart('${key}')">✕</button>
+        <span class="ci-emoji">${p.e}</span>
+        <div class="ci-meta"><div class="ci-name">${p.zh} · ${p.bm}</div><div class="ci-variant">${v.l} — 价格由 GNL 按 Group ${CU?CU.grp:''} 确认</div></div>
+        <button class="ci-rm" onclick="delCI('${key}')">✕</button>
       </div>
-      <div class="ci-bottom">
-        <span class="ci-unit-price">${lp!==null&&lp!==undefined?'RM '+lp.toFixed(2):''} ×</span>
-        <div class="ci-qty-row">
-          <button class="qs-btn" onclick="changeQty('${key}','${p.id}',${vi},-1)" ${it.qty<=0.5?'disabled':''}>−</button>
-          <input class="qs-input" type="number" min="0" step="0.5" value="${it.qty}"
-            onchange="setQtyDirect('${key}','${p.id}',${vi},this.value)">
-          <span class="qs-unit">${p.unit}</span>
-          <button class="qs-btn" onclick="changeQty('${key}','${p.id}',${vi},1)">+</button>
+      <div class="ci-bot">
+        <span class="ci-note">${p.u} ×</span>
+        <div class="qstep">
+          <button class="qb" onclick="cq('${key}','${p.id}',${it.vi},-1)" ${it.qty<=0.5?'disabled':''}>−</button>
+          <input class="qi" type="number" min="0" step="0.5" value="${it.qty}" onchange="sq('${key}','${p.id}',${it.vi},this.value)">
+          <span class="qu">${p.u}</span>
+          <button class="qb" onclick="cq('${key}','${p.id}',${it.vi},1)">+</button>
         </div>
-        <span class="ci-amount">RM ${amt.toFixed(2)}</span>
+        <span class="ci-amt">${it.qty} ${p.u}</span>
       </div>
     </div>`;
-  }
-  wrap.innerHTML=html;
+  }).join('');
 }
-function removeFromCart(key){
-  delete cart[key];
-  refreshCartUI(); renderProducts();
-}
+function delCI(key){delete cart[key];refreshCart();renderProds();}
 
-// ==================== ORDER ====================
 function placeOrder(){
   if(!Object.keys(cart).length){alert('购物车是空的！');return;}
-  orderCounter++;
-  const ref='#'+new Date().toLocaleDateString('en-MY',{day:'2-digit',month:'2-digit'}).replace('/','').replace('/','')+'-'+String(orderCounter).padStart(3,'0');
-  document.getElementById('successRef').textContent=ref;
-  SAMPLE_ORDERS.unshift({
-    id:ref,date:new Date().toLocaleString(),delivery:selectedDate,
-    status:'pending',
-    items:Object.values(cart).map(it=>it.prod.zh+' '+it.qty+it.prod.unit).join(' · '),
-    total:Object.entries(cart).reduce((s,[k,it])=>s+(prices[k]||0)*it.qty,0),
-    payType:currentUser.payType
-  });
-  cart={};
-  refreshCartUI(); renderProducts();
-  goScreen('s-success');
+  const ref='#'+new Date().toLocaleDateString('en-MY',{day:'2-digit',month:'2-digit'}).replace(/\//g,'')+'-'+String(++oc).padStart(3,'0');
+  document.getElementById('succRef').textContent=ref;
+  cart={}; refreshCart(); renderProds(); goS('s-success');
 }
 
-// ==================== ORDERS SCREEN ====================
-let orderStatusFilter='all';
-function filterOrders(f,el){
-  orderStatusFilter=f;
-  document.querySelectorAll('#orderFilter .filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderOrdersList();
+// ════════════════════════════════════
+// ORDERS (customer — expandable)
+// ════════════════════════════════════
+function filtOrd(f,el){
+  ordFilter=f;
+  document.querySelectorAll('#s-orders .fc').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); renderOrders();
 }
-function renderOrdersList(){
-  const wrap=document.getElementById('ordersListWrap');
-  const filtered=SAMPLE_ORDERS.filter(o=>orderStatusFilter==='all'||o.status===orderStatusFilter);
-  const totalAmt=SAMPLE_ORDERS.reduce((s,o)=>s+o.total,0);
-  const sp={pending:'sp-pending',confirmed:'sp-confirmed',delivered:'sp-delivered',cancelled:'sp-cancelled'};
-  const sl={pending:'待确认',confirmed:'已确认',delivered:'已配送',cancelled:'已取消'};
-  let html=`<div class="monthly-card">
-    <div class="mc-title">📊 历史汇总</div>
-    <div class="mc-grid">
-      <div class="mc-item"><div class="mc-val">${SAMPLE_ORDERS.length}</div><div class="mc-lbl">总订单数</div></div>
-      <div class="mc-item"><div class="mc-val">RM ${totalAmt.toFixed(0)}</div><div class="mc-lbl">总消费额</div></div>
+function renderOrders(){
+  const wrap=document.getElementById('ordersWrap');
+  const filtered=SAMPLE_ORDERS.filter(o=>ordFilter==='all'||o.status===ordFilter);
+  const spCls={pending:'sp-pending',confirmed:'sp-confirmed',delivered:'sp-delivered',cancelled:'sp-cancelled'};
+  const spLbl={pending:'待确认',confirmed:'已确认',delivered:'已配送',cancelled:'已取消'};
+  let html=`<div class="month-summary">
+    <div class="ms-title">📊 历史汇总</div>
+    <div class="ms-grid">
+      <div><div class="ms-v">${SAMPLE_ORDERS.length}</div><div class="ms-l">总订单数</div></div>
+      <div><div class="ms-v">${SAMPLE_ORDERS.filter(o=>o.status==='delivered').length}</div><div class="ms-l">已配送</div></div>
     </div>
   </div>`;
   for(const o of filtered){
-    html+=`<div class="order-card">
-      <div class="oc-top">
-        <div>
+    const preview=o.items.slice(0,2).map(it=>it.name+' '+it.qty+it.u).join(' · ')+(o.items.length>2?` + ${o.items.length-2} 项`:'');
+    html+=`<div class="order-card" id="oc-${o.id.replace('#','')}">
+      <div class="oc-header" onclick="toggleOC('${o.id.replace('#','')}')">
+        <div class="oc-left">
           <div class="oc-no">${o.id}</div>
           <div class="oc-date">下单: ${o.date}</div>
-          <div class="oc-delivery">📦 送货: ${fmtDateStr(o.delivery)}</div>
+          <div class="oc-deldate">📦 送货: ${fmtDS(o.del)}</div>
+          <div class="oc-preview">${preview}</div>
         </div>
-        <span class="status-pill ${sp[o.status]||'sp-pending'}">${sl[o.status]||o.status}</span>
+        <div class="oc-right">
+          <span class="sp ${spCls[o.status]||'sp-pending'}">${spLbl[o.status]||o.status}</span>
+          <div class="oc-total">价格待确认</div>
+          <span class="oc-expand-icon">▼</span>
+        </div>
       </div>
-      <div class="oc-items">${o.items}</div>
-      <div class="oc-bottom">
-        <span class="oc-total-lbl">合计 (${o.payType==='cod'?'COD':'账期'})</span>
-        <span class="oc-total">RM ${o.total.toFixed(2)}</span>
+      <div class="oc-body">
+        <div class="oc-items-list">
+          ${o.items.map(it=>`<div class="oc-item-row">
+            <div><div class="oc-item-name">${it.name}</div><div class="oc-item-variant">${it.variant}</div></div>
+            <div class="oc-item-qty">${it.qty} ${it.u}</div>
+          </div>`).join('')}
+          ${o.surcharge?'<div style="font-size:11px;color:var(--amber);font-weight:700;padding:6px 0;">⚠️ 小订单附加费 + RM 0.50</div>':''}
+        </div>
+        <div class="oc-footer">
+          <span class="oc-pay">${o.pay==='B'?'💵 COD':'💳 账期'} · Group ${o.pay}</span>
+          <span class="oc-total-big">价格待确认</span>
+        </div>
       </div>
     </div>`;
   }
-  if(!filtered.length) html+='<div style="text-align:center;padding:40px;color:var(--t4);">没有相关订单</div>';
+  if(!filtered.length) html+='<div style="text-align:center;padding:40px;color:var(--ink4)">📋 没有相关订单</div>';
   wrap.innerHTML=html;
 }
-
-// ==================== ADMIN ====================
-function adminTab(tab,el){
-  document.querySelectorAll('.at-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('ap-'+tab).classList.add('active');
+function toggleOC(id){
+  const card=document.getElementById('oc-'+id);
+  if(card) card.classList.toggle('expanded');
 }
+
+// ════════════════════════════════════
+// ADMIN: ORDERS (expandable + editable + scroll to bottom on status change)
+// ════════════════════════════════════
 function renderAdminOrders(){
-  const sp={pending:'sp-pending',confirmed:'sp-confirmed',delivered:'sp-delivered',cancelled:'sp-cancelled'};
-  const sl={pending:'待确认',confirmed:'已确认',delivered:'已配送',cancelled:'已取消'};
+  const spCls={pending:'sp-pending',confirmed:'sp-confirmed',delivered:'sp-delivered',cancelled:'sp-cancelled'};
+  const spLbl={pending:'待确认',confirmed:'已确认',delivered:'已配送',cancelled:'已取消'};
   let html='';
-  for(const o of ADMIN_ORDERS){
-    html+=`<div class="admin-order-item">
-      <div class="aoi-top">
-        <div>
-          <div class="aoi-shop">${o.shop}</div>
-          <div class="aoi-no">${o.no}</div>
-          <div class="aoi-delivery">📦 送货: ${fmtDateStr(o.delivery)}</div>
+  ADMIN_ORDERS.forEach((o,oi)=>{
+    const preview=o.items.slice(0,2).map(it=>it.name+' '+it.qty+it.unit).join(' · ')+(o.items.length>2?` 等${o.items.length}项`:'');
+    const totalQty=o.items.reduce((s,it)=>s+it.qty,0);
+    html+=`<div class="aoi" id="aoi-${oi}">
+      <div class="aoi-header" onclick="toggleAOI(${oi})">
+        <div class="aoi-top">
+          <div>
+            <div class="aoi-shop">${o.shop}</div>
+            <div class="aoi-no">${o.no}</div>
+            <div class="aoi-del">📦 ${fmtDS(o.del)}</div>
+          </div>
+          <div class="aoi-actions">
+            <select class="status-sel" id="ssel-${oi}" onclick="event.stopPropagation()" onchange="aStatusChange(${oi},this)">
+              <option value="pending" ${o.status==='pending'?'selected':''}>待确认</option>
+              <option value="confirmed" ${o.status==='confirmed'?'selected':''}>已确认</option>
+              <option value="delivered" ${o.status==='delivered'?'selected':''}>已配送</option>
+              <option value="cancelled" ${o.status==='cancelled'?'selected':''}>已取消</option>
+            </select>
+            <span class="aoi-expand-icon">▼</span>
+          </div>
         </div>
-        <select class="status-select" onchange="adminChangeStatus(this,'${o.no}')">
-          <option value="pending" ${o.status==='pending'?'selected':''}>待确认</option>
-          <option value="confirmed" ${o.status==='confirmed'?'selected':''}>已确认</option>
-          <option value="delivered" ${o.status==='delivered'?'selected':''}>已配送</option>
-          <option value="cancelled" ${o.status==='cancelled'?'selected':''}>已取消</option>
-        </select>
+        <div class="aoi-preview">${preview}</div>
+        <div class="aoi-meta-row">
+          <span class="aoi-pay">${o.pay==='cod'?'💵 COD':'💳 账期'} · ${o.items.length} 项 · ${totalQty}kg</span>
+          <span class="aoi-grp-badge" style="${GRP_BADGE_COLORS[o.grp]}">Group ${o.grp} · ${GRP[o.grp].name}</span>
+        </div>
       </div>
-      <div class="aoi-items">${o.items}</div>
-      <div class="aoi-bottom">
-        <span class="aoi-total">RM ${o.total.toFixed(2)}</span>
+      <div class="aoi-body">
+        <div class="aoi-items-edit">
+          <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">
+            商品明细 — 可修改数量 &amp; 价格
+          </div>
+          ${o.items.map((it,ii)=>`<div class="aoi-item-edit-row">
+            <div class="aie-info">
+              <div class="aie-name">${it.name}</div>
+              <div class="aie-variant">${it.variant}</div>
+              <div class="aie-qty-row">
+                <span class="aie-label">数量:</span>
+                <div class="qstep">
+                  <button class="qb" style="width:24px;height:24px;font-size:14px;" onclick="aChangeQty(${oi},${ii},-1)">−</button>
+                  <input class="admin-inp" type="number" min="0" step="0.5" value="${it.qty}" id="qty-${oi}-${ii}"
+                    onchange="aSetQty(${oi},${ii},this.value)" oninput="this.classList.add('changed')">
+                  <span style="font-size:11px;color:var(--ink3);">${it.unit}</span>
+                  <button class="qb" style="width:24px;height:24px;font-size:14px;" onclick="aChangeQty(${oi},${ii},1)">+</button>
+                </div>
+              </div>
+              <div class="aie-price-row">
+                <span class="aie-label">价格:</span>
+                <div class="pinp-wrap">
+                  <span style="font-size:11px;color:var(--ink3);">RM</span>
+                  <input class="admin-inp" type="number" min="0" step="0.01" placeholder="—"
+                    id="pr-${oi}-${ii}" oninput="this.classList.add('changed')">
+                  <span style="font-size:10px;color:var(--ink3);">/${it.unit}</span>
+                </div>
+              </div>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div class="aoi-footer">
+          ${o.surcharge?'<div class="aoi-surcharge">⚠️ 小订单附加费 + RM 0.50 (总量 < 7kg)</div>':''}
+          <div class="aoi-total-row">
+            <span class="aoi-total-lbl">订单总额 (RM)</span>
+            <input class="aoi-total-inp" type="number" step="0.01" placeholder="输入总价" id="atotal-${oi}">
+          </div>
+          <div class="aoi-status-row">
+            <button class="aoi-save-btn" onclick="aSaveOrder(${oi})">💾 保存此订单</button>
+          </div>
+        </div>
       </div>
     </div>`;
-  }
-  document.getElementById('adminOrdersList').innerHTML=html;
+  });
+  document.getElementById('adminOrdersWrap').innerHTML=html;
 }
-function adminChangeStatus(sel,no){ /* in real app: API call */ }
-function renderPriceEditor(){
+
+function toggleAOI(i){
+  const card=document.getElementById('aoi-'+i);
+  if(card) card.classList.toggle('expanded');
+}
+
+function aStatusChange(oi,sel){
+  ADMIN_ORDERS[oi].status=sel.value;
+  // Auto scroll to bottom of this card after status change
+  const card=document.getElementById('aoi-'+oi);
+  if(card){
+    if(!card.classList.contains('expanded')) card.classList.add('expanded');
+    setTimeout(()=>{
+      const footer=card.querySelector('.aoi-footer');
+      if(footer) footer.scrollIntoView({behavior:'smooth',block:'nearest'});
+    },200);
+  }
+}
+
+function aChangeQty(oi,ii,delta){
+  const inp=document.getElementById(`qty-${oi}-${ii}`);
+  if(!inp) return;
+  const cur=parseFloat(inp.value)||0,nw=Math.max(0,+(cur+delta).toFixed(1));
+  inp.value=nw; inp.classList.add('changed');
+  ADMIN_ORDERS[oi].items[ii].qty=nw;
+}
+function aSetQty(oi,ii,val){
+  ADMIN_ORDERS[oi].items[ii].qty=Math.max(0,parseFloat(val)||0);
+}
+function aSaveOrder(oi){
+  const totalEl=document.getElementById('atotal-'+oi);
+  const total=parseFloat(totalEl?.value)||null;
+  ADMIN_ORDERS[oi].total=total;
+  // Remove changed highlights
+  document.querySelectorAll(`#aoi-${oi} .changed`).forEach(el=>el.classList.remove('changed'));
+  const btn=document.querySelector(`#aoi-${oi} .aoi-save-btn`);
+  if(btn){const orig=btn.textContent;btn.textContent='✅ 已保存！';btn.style.background='var(--g3)';setTimeout(()=>{btn.textContent=orig;btn.style.background='';},2000);}
+}
+function resetDate(){document.getElementById('adminDateFilter').value=new Date().toISOString().split('T')[0];}
+
+// ════════════════════════════════════
+// ADMIN: PRICES (by group)
+// ════════════════════════════════════
+const GRP_DESCS={
+  A:'Group A — 批发商 Wholesale: 最低价格，大量采购',
+  B:'Group B — COD 客户: 货到付款，现金结算',
+  C:'Group C — 账期客户: 按账期结算 (14–30天)',
+  D:'Group D — 散客 Walk-in: 零售价格，最高',
+};
+let curPriceGrp='A';
+function setPriceGrp(g,el){
+  curPriceGrp=g;
+  document.querySelectorAll('.grp-tab').forEach(t=>{t.className='grp-tab';});
+  el.className='grp-tab active-'+g;
+  document.getElementById('grpDesc').textContent=GRP_DESCS[g];
+  document.getElementById('grpDesc').className='grp-desc grp-desc-'+g;
+  document.getElementById('saveGrpLabel').textContent=g;
+  renderPriceList();
+}
+function renderPriceList(){
   const cats=['tomato','chili','leafy','gourd','root','bean','herb','other'];
-  let html=''; let count=0;
-  for(const cat of cats){
-    const items=PRODUCTS.filter(p=>p.cat===cat);
+  let html='',cnt=0;
+  for(const c of cats){
+    const items=PRODUCTS.filter(p=>p.cat===c);
     if(!items.length) continue;
-    html+=`<div class="price-section-hdr">${CAT_LABELS[cat].zh}</div>`;
+    html+=`<div style="padding:10px 16px 4px;font-size:10px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;">${CAT_LABELS[c].zh}</div>`;
     for(const p of items){
-      html+=`<div class="price-item">
-        <div class="pi-top">
-          <span class="pi-emoji">${p.emoji}</span>
+      html+=`<div class="pi">
+        <div class="pi-head"><span class="pi-emoji">${p.e}</span>
           <div class="pi-names"><div class="pi-bm">${p.bm}</div><div class="pi-zh">${p.zh} / ${p.en}</div></div>
         </div>
-        <div class="pi-variants">`;
-      p.variants.forEach((v,i)=>{
-        const key=p.id+'_'+i;
-        const cur=prices[key];
-        count++;
-        html+=`<div class="piv-row">
-          <span class="piv-label">${v.lbl}</span>
-          <div class="price-inp-wrap">
+        <div class="pi-vrows">`;
+      p.v.forEach((v,i)=>{
+        const key=p.id+'_'+i,cur=prices[curPriceGrp][key]; cnt++;
+        html+=`<div class="pi-vr">
+          <span class="pi-vl">${v.l}</span>
+          <div class="pinp-wrap">
             <span>RM</span>
-            <input class="price-inp" type="number" step="0.10" min="0"
-              value="${cur!==null&&cur!==undefined?cur:''}" placeholder="—"
-              oninput="this.classList.add('changed')"
-              id="pinp-${key}">
-            <span class="piv-unit">/${p.unit}</span>
+            <input class="pinp" type="number" step="0.10" min="0" value="${cur!==null&&cur!==undefined?cur:''}" placeholder="—"
+              oninput="this.classList.add('ch')" id="pi-${curPriceGrp}-${key}">
+            <span class="pi-unit">/${p.u}</span>
           </div>
         </div>`;
       });
       html+='</div></div>';
     }
   }
-  document.getElementById('priceEditorList').innerHTML=html;
-  document.getElementById('priceCount').textContent=count;
+  document.getElementById('priceList').innerHTML=html;
+  document.getElementById('priceCnt').textContent=cnt+' 种商品';
 }
 function savePrices(){
-  PRODUCTS.forEach(p=>{
-    p.variants.forEach((v,i)=>{
-      const key=p.id+'_'+i;
-      const inp=document.getElementById('pinp-'+key);
-      if(inp){
-        const val=parseFloat(inp.value);
-        prices[key]=isNaN(val)?null:val;
-        inp.classList.remove('changed');
-      }
-    });
-  });
+  const g=curPriceGrp;
+  PRODUCTS.forEach(p=>p.v.forEach((_,i)=>{
+    const key=p.id+'_'+i,el=document.getElementById(`pi-${g}-${key}`);
+    if(el){const val=parseFloat(el.value);prices[g][key]=isNaN(val)?null:val;el.classList.remove('ch');}
+  }));
   const t=document.getElementById('saveToast');
-  t.style.display='block';
-  setTimeout(()=>t.style.display='none',3000);
-  renderProducts(); refreshCartUI();
+  t.style.display='block'; setTimeout(()=>t.style.display='none',3000);
 }
-function renderCustomers(){
+
+// ════════════════════════════════════
+// ADMIN: CUSTOMERS
+// ════════════════════════════════════
+let custFilterVal='all';
+function filtCust(f,el){
+  custFilterVal=f;
+  document.querySelectorAll('#custFilter .fc').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); renderCustList();
+}
+function renderCustList(){
+  const filtered=custFilterVal==='all'?CUSTOMERS_LIST:CUSTOMERS_LIST.filter(c=>c.grp===custFilterVal);
   let html='';
-  for(const c of CUSTOMERS){
+  filtered.forEach(c=>{
     const init=c.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-    html+=`<div class="cust-item">
-      <div class="cust-avatar">${init}</div>
-      <div class="cust-info">
-        <div class="cust-name">${c.name}</div>
-        <div class="cust-meta">${c.meta}</div>
+    html+=`<div class="cust-card">
+      <div class="cc-top">
+        <div class="cc-av cc-av-${c.grp}">${init}</div>
+        <div class="cc-info"><div class="cc-name">${c.name}</div><div class="cc-meta">${c.meta}</div></div>
+        <div class="cc-right">
+          <span class="cc-grp-badge" style="${GRP_BADGE_COLORS[c.grp]}">Group ${c.grp}</span>
+          <div class="cc-bal">${c.bal}</div>
+        </div>
       </div>
-      <div class="cust-right">
-        <div class="cust-type" style="color:${c.type==='cod'?'var(--amber)':'var(--blue)'}">${c.type==='cod'?'COD':'账期'}</div>
-        <div class="cust-balance">${c.balance}</div>
+      <div class="cc-bot">
+        <span class="cc-bot-label">更改分组:</span>
+        <select class="grp-sel" id="csel-${c.id}" onchange="custGrpChanged('${c.id}',this)">
+          <option value="A" ${c.grp==='A'?'selected':''}>A — 批发商</option>
+          <option value="B" ${c.grp==='B'?'selected':''}>B — COD</option>
+          <option value="C" ${c.grp==='C'?'selected':''}>C — 账期</option>
+          <option value="D" ${c.grp==='D'?'selected':''}>D — 散客</option>
+        </select>
+        <button class="cc-save" onclick="saveCustGrp('${c.id}')">保存</button>
       </div>
     </div>`;
-  }
-  document.getElementById('custList').innerHTML=html;
+  });
+  document.getElementById('custWrap').innerHTML=html;
+  document.getElementById('custCntLbl').textContent=CUSTOMERS_LIST.length+' / 100 客户';
+}
+function custGrpChanged(id,sel){/* preview change */}
+function saveCustGrp(id){
+  const sel=document.getElementById('csel-'+id);
+  if(!sel) return;
+  const c=CUSTOMERS_LIST.find(x=>x.id===id);
+  if(c){c.grp=sel.value;renderCustList();}
 }
 
-// ==================== EXPORT (demo) ====================
-function exportExcel(){
-  const from=document.getElementById('exportFrom').value||'(未选)';
-  const to=document.getElementById('exportTo').value||'(未选)';
-  alert(`✅ 导出 Excel\n\n日期范围: ${from} 至 ${to}\n\n实际版本将生成包含所有订单明细的 .xlsx 文件。`);
+// ════════════════════════════════════
+// ADMIN: TABS + EXPORT
+// ════════════════════════════════════
+function aTab(tab,el){
+  document.querySelectorAll('.at').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.ap').forEach(p=>{p.style.display='none';p.classList.remove('active');});
+  const panel=document.getElementById('ap-'+tab);
+  panel.style.display=tab==='prices'?'flex':'block';
+  panel.classList.add('active');
 }
-function exportPDF(){
-  alert('✅ 导出 PDF 报告\n\n实际版本将生成 PDF 汇总报告。');
+function doExport(type){
+  const f=document.getElementById('expFrom').value||'(未选)';
+  const t=document.getElementById('expTo').value||'(未选)';
+  alert(`${type==='excel'?'📊 导出 Excel':'📄 导出 PDF'}\n\n日期: ${f} 至 ${t}\n\n包含：\n· 客户名 / 订单号 / 客户分组 (A/B/C/D)\n· 送货日期 / 商品明细 / 数量 / 协议价格\n· 小订单附加费 (< 7kg + RM 0.50)\n· 每单总额 / 付款方式\n· 日汇总 + 月汇总\n\n（实际版本将生成真实文件下载）`);
 }
 
-// ==================== SCREEN NAV ====================
-function goScreen(id){
+// ════════════════════════════════════
+// SCREEN NAV
+// ════════════════════════════════════
+function goS(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if(id==='s-orders') renderOrdersList();
-  if(id==='s-cart'){updateCartDeliveryDate();renderCartItems();}
-  window.scrollTo(0,0);
+  if(id==='s-orders') renderOrders();
+  if(id==='s-cart'){syncDel();renderCartItems();refreshCart();}
 }
-
-// Init export date
-window.onload=()=>{
-  const today=new Date();
-  const fmt=d=>d.toISOString().split('T')[0];
-  const first=new Date(today.getFullYear(),today.getMonth(),1);
-  document.getElementById('exportFrom').value=fmt(first);
-  document.getElementById('exportTo').value=fmt(today);
-};
 </script>
 </body>
 </html>
